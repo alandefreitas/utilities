@@ -1,0 +1,32 @@
+( *)(public|protected|private)([^:])
+$1$2:\n$1
+
+@return \$this\n(.*\*\/\n)(.*(public|private):\n)(\n.*)function
+@return \$this\n$1$2$4self_t&
+
+@return (\w+)(\s.*)\n(.*\*\/\n)(.*(public|private):\n)(\n.*)function
+@return $1$2\n$3$4\n$1
+
+this->([A-Za-z][A-Za-z_]+)([^\w\(])
+this->_$1$2
+
+return \$this;
+return \*this;
+
+foreach\(([\$\w]+)\n?\s+as\n?\s+([\$\w]+)\)
+for (auto& $2: $1)
+
+\$([a-z]+)
+_$1
+
+([^\w"])([a-z_]+)([A-Z])
+$1$2_\L$3
+
+\\Illuminate[\\\w]+\\(\w+)
+$1
+
+(/\*\*\n(.*\n){2,10})\s+(public|protected):
+$3:\n$1
+
+(this->)([^_]\w+[^\(\w])
+$1_$2
