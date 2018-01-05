@@ -12,8 +12,6 @@ find_package_online(OpenCL REQUIRED)
 
 find_package_online(Gnuplot REQUIRED)
 
-find_package_online(Plot REQUIRED)
-
 find_package_online(ThreadPool REQUIRED)
 
 find_package_online(JSON REQUIRED)
@@ -28,12 +26,9 @@ find_package_online(TermColor REQUIRED)
 
 find_package_online(TypeString REQUIRED)
 
-find_package_online(Range REQUIRED)
-
 set(Utils_INCLUDE_DIRS
     ${Boost_INCLUDE_DIR}
     SYSTEM ${OpenCL_INCLUDE_DIRS}
-    ${Plot_INCLUDE_DIRS}
     ${ThreadPool_INCLUDE_DIRS}
     ${JSON_INCLUDE_DIRS}
     ${Gnuplot-iostream_INCLUDE_DIRS}
@@ -47,7 +42,6 @@ set(Utils_INCLUDE_DIRS
 set(Utils_LIBRARIES
     ${Boost_LIBRARIES}
     SYSTEM ${OpenCL_LIBRARIES}
-    ${Plot_LIBRARIES}
     ${ThreadPool_LIBRARIES}
     ${JSON_LIBRARIES}
     ${Gnuplot-iostream_LIBRARIES}

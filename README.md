@@ -89,6 +89,7 @@ This library includes many useful utility functions in the following categories:
 In can include it in your CMake project with:
 
 ```cmake
+include(ExternalProject)
 ExternalProject_Add(
         utilities
         GIT_REPOSITORY "https://github.com/alandefreitas/utilities.git"
@@ -97,7 +98,9 @@ ExternalProject_Add(
         PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/include/utilities_prefix"
         # UPDATE_COMMAND ""
 )
-include(${CMAKE_CURRENT_SOURCE_DIR}/include/utilities/find_external_packages.cmake)
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/include/utilities/find_external_packages.cmake)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/include/utilities/find_external_packages.cmake)
+endif()
 # ... create your target
 target_include_directories(my_target PUBLIC ${Utils_INCLUDE_DIRS})
 target_link_libraries(my_target ${Utils_LIBRARIES})
