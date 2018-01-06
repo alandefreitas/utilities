@@ -1,7 +1,7 @@
 # Package Manager
-#if (NOT EXISTS ${FindPackageOnline})
-#    file(DOWNLOAD https://raw.githubusercontent.com/alandefreitas/find_package_online/master/FindPackageOnline ${CMAKE_CURRENT_SOURCE_DIR}/FindPackageOnline)
-#endif()
+if (NOT EXISTS ${FindPackageOnline})
+    file(DOWNLOAD https://raw.githubusercontent.com/alandefreitas/find_package_online/master/FindPackageOnline ${CMAKE_CURRENT_SOURCE_DIR}/FindPackageOnline)
+endif()
 include(FindPackageOnline)
 
 set(Boost_USE_STATIC_LIBS ON)

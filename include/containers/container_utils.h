@@ -6,6 +6,8 @@
 #define WPP_CONTAINER_UTILS_H
 
 // External
+
+
 #include <boost/bimap.hpp>
 #include <boost/bimap/multiset_of.hpp>
 #include <boost/bimap/unconstrained_set_of.hpp>
@@ -15,6 +17,8 @@
 
 #include <boost/container/vector.hpp>
 #include <boost/container/stable_vector.hpp>
+#include <boost/container/flat_map.hpp>
+#include <boost/container/flat_set.hpp>
 
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/hashed_index.hpp>
@@ -61,6 +65,9 @@ namespace utl {
     using boost::heap::binomial_heap;
 
     using boost::circular_buffer;
+
+    using boost::container::flat_map;
+    using boost::container::flat_set;
 
 }
 

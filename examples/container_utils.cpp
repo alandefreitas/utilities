@@ -97,6 +97,19 @@ int main() {
         cout << it->first << '\n';
     }
 
+    cout << bold << on_yellow << "Flat associative containers (represented by sorted vectors)" << reset << endl;
+    cout << bold << underline << "Flat map" << reset << endl;
+    {
+        flat_map<string, int> animals;
+        animals["cat"] = 4;
+        animals["shark"] = 0;
+        animals["spider"] = 8;
+        cout << animals["cat"] << '\n';
+        cout << animals.count("shark") << '\n';
+
+    }
+
+
     cout << bold << on_yellow << "Multidimensional arrays" << reset << endl;
     cout << bold << underline << "One-dimensional array with multi_array" << reset << endl;
     {

@@ -6,7 +6,7 @@
 #define UTILITIES_STREAM_UTILS_H
 
 // External
-#include "include/termcolor/termcolor.hpp"
+#include "termcolor/termcolor.hpp"
 
 #include "prettyprint.hpp"
 

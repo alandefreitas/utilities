@@ -12,7 +12,7 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
-#include "include/termcolor/termcolor.hpp"
+#include "termcolor/termcolor.hpp"
 
 #include "centered.h"
 #include "error.h"

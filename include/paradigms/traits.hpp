@@ -8,23 +8,68 @@
 
 namespace utl {
 
-    /**
-    .. macro:: DECLARE_HAS_TYPE_MEMBER(member_name)
+    template<class T>
+    struct is_c_str
+            : std::integral_constant<
+                    bool,
+                    std::is_same<char const *, typename std::decay<T>::type>::value ||
+                    std::is_same<char *, typename std::decay<T>::type>::value ||
+                    std::is_same<char[], typename std::decay<T>::type>::value
+            > {
+    };
+    template<typename T>
+    struct is_arithmetic_or_string_variable
+            : std::integral_constant<bool, std::is_arithmetic<std::decay<T>>::value ||
+                                           std::is_assignable<std::string, std::decay<T>>::value ||
+                                           is_c_str<T>::value> {
+    };
+    template<typename T>
+    struct is_arithmetic_or_string
+            : std::integral_constant<bool,
+                    is_arithmetic_or_string_variable<std::decay<T>>::value> {
+    };
+    template<typename T>
+    struct is_arithmetic_or_string_reference
+            : std::integral_constant<bool,
+                    is_arithmetic_or_string<T>::value && std::is_reference<T>::value> {
+    };
+    template<typename T>
+    struct is_arithmetic_or_string_const
+            : std::integral_constant<bool, is_arithmetic_or_string<T>::value && std::is_const<T>::value> {
+    };
+    template<typename T>
+    struct is_pure_char
+            : std::integral_constant<bool,
+                    std::is_same<T, char>::value || std::is_same<T, char16_t>::value ||
+                    std::is_same<T, char32_t>::value || std::is_same<T, wchar_t>::value ||
+                    std::is_same<T, signed char>::value> {
+    };
+    template<typename T>
+    struct is_bool
+            : std::integral_constant<bool, std::is_same<T, bool>::value> {
+    };
+    template<typename T>
+    struct is_pure_int
+            : std::integral_constant<bool,
+                    std::is_integral<T>::value && !is_bool<T>::value && !is_pure_char<T>::value> {
+    };
 
-        This macro declares a template ``has_member_name`` which will check whether
-        a type member ``member_name`` exists in a particular type.
+    template<typename T>
+    class has_stream {
+            typedef char one;
+            typedef long two;
 
-        Example::
+            template<typename C>
+            static one test(typeof(&C::operator<<));
 
-            DECLARE_HAS_TYPE_MEMBER(result_type)
+            template<typename C>
+            static two test(...);
 
-            ...
+        public:
+            enum { value = sizeof(test<T>(0)) == sizeof(char) };
+    };
 
-            printf("%d\n", has_result_type< std::plus<int> >::value);
-            // ^ prints '1' (true)
-            printf("%d\n", has_result_type< double(*)() >::value);
-            // ^ prints '0' (false)
-    */
+
     #define DECLARE_HAS_TYPE_MEMBER(member_name) \
     template <typename, typename = void> \
     struct has_##member_name \
@@ -33,22 +78,6 @@ namespace utl {
     struct has_##member_name<T, typename std::enable_if<sizeof(typename T::member_name)||true>::type> \
     { enum { value = true }; };
 
-    /**
-    .. type:: struct utl::function_traits<F>
-
-        Obtain compile-time information about a function object *F*.
-
-        This template currently supports the following types:
-
-        * Normal function types (``R(T...)``), function pointers (``R(*)(T...)``)
-          and function references (``R(&)(T...)`` and ``R(&&)(T...)``).
-        * Member functions (``R(C::*)(T...)``)
-        * ``std::function<F>``
-        * Type of lambda functions, and any other types that has a unique
-          ``operator()``.
-        * Type of ``std::mem_fn`` (only for GCC's libstdc++ and LLVM's libc++).
-          Following the C++ spec, the first argument will be a raw pointer.
-    */
     template<typename T>
     struct function_traits
             : public function_traits<decltype(&T::operator())> {
@@ -75,43 +104,14 @@ namespace utl {
 
     template<typename ReturnType, typename... Args>
     struct function_traits<ReturnType(Args...)> {
-        /**
-        .. type:: type result_type
-
-            The type returned by calling an instance of the function object type *F*.
-        */
         typedef ReturnType result_type;
-
-        /**
-        .. type:: type function_type
-
-            The function type (``R(T...)``).
-        */
         typedef ReturnType function_type(Args...);
-
-        /**
-        .. type:: type member_function_type<OwnerType>
-
-            The member function type for an *OwnerType* (``R(OwnerType::*)(T...)``).
-        */
         template<typename OwnerType>
         using member_function_type = typename xx_impl::memfn_type<
                 typename std::remove_pointer<typename std::remove_reference<OwnerType>::type>::type,
                 ReturnType, Args...
         >::type;
-
-        /**
-        .. data:: static const size_t arity
-
-            Number of arguments the function object will take.
-        */
         enum { arity = sizeof...(Args) };
-
-        /**
-        .. type:: type arg<n>::type
-
-            The type of the *n*-th argument.
-        */
         template<size_t i>
         struct arg {
             typedef typename std::tuple_element<i, std::tuple<Args...>>::type type;
@@ -225,45 +225,16 @@ namespace utl {
         typename std::remove_reference<T>::type&& \
     >::type
 
-    /**
-    .. function:: auto utl::forward_like<Like, T>(T&& t) noexcept
-
-        Forward the reference *t* like the type of *Like*. That means, if *Like* is
-        an lvalue (reference), this function will return an lvalue reference of *t*.
-        Otherwise, if *Like* is an rvalue, this function will return an rvalue
-        reference of *t*.
-
-        This is mainly used to propagate the expression category (lvalue/rvalue) of
-        a member of *Like*, generalizing ``std::forward``.
-    */
     template<typename R, typename T>
     FORWARD_RES_8QR485JMSBT forward_like(T &&input) noexcept {
         return static_cast<FORWARD_RES_8QR485JMSBT>(input);
     }
 
-    /**
-    .. type:: struct utl::pointee<T>
-
-        Returns the type by derefering an instance of *T*. This is a generalization
-        of ``std::remove_pointer``, that it also works with iterators.
-    */
     template<typename T>
     struct pointee {
-        /**
-        .. type:: type type
-
-            Result of dereferencing.
-        */
         typedef typename std::remove_reference<decltype(*std::declval<T>())>::type type;
     };
 
-    /**
-    .. function:: std::add_rvalue_reference<T>::type utl::rt_val<T>() noexcept
-
-        Returns a value of type *T*. It is guaranteed to do nothing and will not
-        throw a compile-time error, but using the returned result will cause
-        undefined behavior.
-    */
     template<typename T>
     typename std::add_rvalue_reference<T>::type rt_val() noexcept {
         return std::move(*static_cast<T *>(nullptr));

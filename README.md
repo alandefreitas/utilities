@@ -24,6 +24,7 @@ This library includes many useful utility functions in the following categories:
 * Containers [(examples)](./examples/container_utils.cpp)
     * Graphs
     * Bidirectional maps
+    * Flat associative containers (as sorted vectors)
     * Multidimensional arrays
     * Recursive vector
     * Stable vector
