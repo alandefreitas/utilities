@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-#include "include/termcolor/termcolor.hpp"
+#include "termcolor/termcolor.hpp"
 
 using namespace boost::spirit;
 

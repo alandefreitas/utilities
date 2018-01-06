@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 14)
 ### EXTERNAL                                        ###
 #######################################################
 include(find_external_packages.cmake)
-
+MESSAGE("${Utils_INCLUDE_DIRS}")
 #######################################################
 ### EXECUTABLE BINARIES                             ###
 #######################################################
