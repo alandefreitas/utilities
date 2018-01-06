@@ -95,18 +95,25 @@ ExternalProject_Add(
         GIT_REPOSITORY "https://github.com/alandefreitas/utilities.git"
         GIT_TAG "master"
         SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/utilities"
-        PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/include/utilities_prefix"
-        # UPDATE_COMMAND ""
+        PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/include/utilities-prefix"
+        UPDATE_COMMAND ""
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ""
+        TEST_COMMAND ""
 )
+
 if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/include/utilities/find_external_packages.cmake)
     include(${CMAKE_CURRENT_SOURCE_DIR}/include/utilities/find_external_packages.cmake)
 endif()
 # ... create your target
-target_include_directories(my_target PUBLIC ${Utils_INCLUDE_DIRS})
+add_executable(my_target main.cpp)
 target_link_libraries(my_target ${Utils_LIBRARIES})
+target_include_directories(my_target PUBLIC ${Utils_INCLUDE_DIRS})
+add_dependencies(my_target utilities)
 ```
 
-Then just `#include "utils.cpp"` in your source file.
+Then just include [`utils.h`](./include/utils.h) in your source file.
 
 - [Examples](#examples)
 - [Issues](#issues)

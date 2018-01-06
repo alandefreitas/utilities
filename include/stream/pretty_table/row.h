@@ -10,7 +10,7 @@
 # include <vector>
 # include <list>
 # include <sstream>
-#include "include/termcolor/termcolor.hpp"
+#include "termcolor/termcolor.hpp"
 #include "centered.h"
 #include "error.h"
 #include "enums.h"
