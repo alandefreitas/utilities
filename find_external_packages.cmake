@@ -6,24 +6,17 @@ include(FindPackageOnline)
 
 set(Boost_USE_STATIC_LIBS ON)
 set(boost_lib_names filesystem regex system iostreams date_time chrono timer thread coroutine log program_options serialization)
-find_package_online(Boost REQUIRED COMPONENTS ${boost_lib_names})
 
-find_package_online(OpenCL REQUIRED)
-
-find_package_online(Gnuplot REQUIRED)
+find_package(Boost REQUIRED COMPONENTS ${boost_lib_names})
+find_package(OpenCL REQUIRED)
+find_package(Gnuplot REQUIRED)
 
 find_package_online(ThreadPool REQUIRED)
-
 find_package_online(JSON REQUIRED)
-
 find_package_online(Gnuplot-iostream REQUIRED)
-
 find_package_online(PrettyPrint REQUIRED)
-
 find_package_online(SimpleServer REQUIRED)
-
 find_package_online(TermColor REQUIRED)
-
 find_package_online(TypeString REQUIRED)
 
 set(Utils_INCLUDE_DIRS
