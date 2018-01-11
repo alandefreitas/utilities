@@ -1,6 +1,15 @@
 # Utilities for Modern C++
 
-This library includes many useful utility functions in the following categories:
+This library includes many useful utilities for C++.
+
+- [List of utilities](#list-of-utilities)
+- [Integration](#integration)
+   - [Downloading libraries](#downloading-libraries)
+   - [Including in CMake](#including-in-cmake)
+- [Examples](#examples)
+- [Issues](#issues)
+
+## List of utilities
 
 * Streaming Data [(examples)](./examples/stream_utils.cpp)
     * Coloured terminal
@@ -87,7 +96,23 @@ This library includes many useful utility functions in the following categories:
     * Memory Pool
     * Flyweight Pattern (avoiding replicate data in objects)
 
-In can include it in your CMake project with:
+## Integration
+
+### Downloading libraries
+
+The project will try to find/download the libraries required but it's much easier to have the libraries installed in advance:
+
+```bash
+sudo apt-get install libboost-all-dev -y
+sudo apt install ocl-icd-libopencl1 opencl-headers clinfo ocl-icd-opencl-dev beignet -y
+sudo apt-get install gnuplot-x11 -y
+```
+
+Also make sure you have a modern C++ compiler installed and you're ready to run all the examples in the project.
+
+### Including in CMake
+
+You can include it in your CMake project with:
 
 ```cmake
 include(ExternalProject)
@@ -114,10 +139,16 @@ target_include_directories(my_target PUBLIC ${Utils_INCLUDE_DIRS})
 add_dependencies(my_target utilities)
 ```
 
-Then just include [`utils.h`](./include/utils.h) in your source file.
+The external project might need to download some files so run cmake with `sudo` at least for the first time.
 
-- [Examples](#examples)
-- [Issues](#issues)
+After that, just include [`utils.h`](./include/utils.h) in your source file. All utilities are in the `utl` namespace. The libraries are organized in such a way that there is no conflict with the `std` so you can use these namespaces:
+
+```cpp
+using namespace std;
+using namespace utl;
+```
+
+However, note that it's a VERY bad programming practice to do that globally in header files.
 
 ## Examples
 
