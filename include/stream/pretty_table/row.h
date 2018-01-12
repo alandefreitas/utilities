@@ -204,22 +204,22 @@ namespace utl {
             color text_background_{color::none};
     };
 
-    row::row(const std::vector<std::string> &header)
+    inline row::row(const std::vector<std::string> &header)
             : _header(header) {}
 
-    row::row(size_t n)
+    inline row::row(size_t n)
             : _values(n) {}
 
 
-    unsigned int row::size(void) const {
+    inline unsigned int row::size(void) const {
         return _values.size();
     }
 
-    void row::push_back(const std::string &value) {
+    inline void row::push_back(const std::string &value) {
         _values.push_back(value);
     }
 
-    bool row::set(const std::string &key, const std::string &value) {
+    inline bool row::set(const std::string &key, const std::string &value) {
         std::vector<std::string>::const_iterator it;
         int pos = 0;
 
@@ -233,14 +233,14 @@ namespace utl {
         return false;
     }
 
-    const cell row::operator[](unsigned int valuePosition) const {
+    inline const cell row::operator[](unsigned int valuePosition) const {
         if (valuePosition < _values.size()) {
             return _values[valuePosition];
         }
         throw error("can't return this value (doesn't exist)");
     }
 
-    const std::string row::operator[](const std::string &key) const {
+    inline const std::string row::operator[](const std::string &key) const {
         std::vector<std::string>::const_iterator it;
         int pos = 0;
 
@@ -254,7 +254,7 @@ namespace utl {
         throw error("can't return this value (doesn't exist)");
     }
 
-    std::ostream &operator<<(std::ostream &os, const row &row__) {
+    inline std::ostream &operator<<(std::ostream &os, const row &row__) {
         for (unsigned int i = 0; i != row__._values.size(); i++) {
             os << row__._values[i] << " | ";
         }
@@ -262,7 +262,7 @@ namespace utl {
         return os;
     }
 
-    std::ofstream &operator<<(std::ofstream &os, const row &row__) {
+    inline std::ofstream &operator<<(std::ofstream &os, const row &row__) {
         for (unsigned int i = 0; i != row__._values.size(); i++) {
             os << row__._values[i];
             if (i < row__._values.size() - 1) {

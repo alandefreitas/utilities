@@ -26,7 +26,9 @@ namespace utl {
     struct default_log_level_holder {
         static T default_level;
     };
-    template <typename T> T default_log_level_holder<T>::default_level{log_level::info};
+
+    template <typename T>
+    T default_log_level_holder<T>::default_level{log_level::info};
 
     class default_log_level : public default_log_level_holder<bool> {};
 
@@ -35,6 +37,7 @@ namespace utl {
     struct enable_logging_holder {
         static T enable;
     };
+
     template <typename T> T enable_logging_holder<T>::enable{true};
 
     class enable_logging : public enable_logging_holder<bool> {};
@@ -52,22 +55,26 @@ namespace utl {
 
     template <typename T>
     struct level_default_settings_holder {
-        static T settings;
         static level_default get(log_level rl);
     };
 
-    template <typename T> T level_default_settings_holder<T>::settings{
-        {log_level::debug   ,"DEBUG   ",color::black,color::none,true,false,false},
-        {log_level::info    ,"INFO    ",color::blue,color::none,true,false,false},
-        {log_level::warning ,"WARNING ",color::none,color::yellow,true,true,false},
-        {log_level::error   ,"ERROR   ",color::red,color::none,true,true,true},
-        {log_level::critical,"CRITICAL",color::yellow,color::red,true,true,true}};
-
-    template <typename T> level_default level_default_settings_holder<T>::get(log_level rl){
-        return *std::find_if(settings.begin(),settings.end(),[&rl](level_default ll){return ll.level == rl;});
+    template <typename T>
+    level_default level_default_settings_holder<T>::get(log_level rl){
+        switch (rl){
+            case log_level::debug:
+                return level_default{log_level::debug   , "DEBUG   ", color::black  , color::none   , true, false, false};
+            case log_level::info:
+                return level_default{log_level::info    , "INFO    ", color::blue   , color::none   , true, false, false};
+            case log_level::warning:
+                return level_default{log_level::warning , "WARNING ", color::none   , color::yellow , true, true , false};
+            case log_level::error:
+                return level_default{log_level::error   , "ERROR   ", color::red    , color::none   , true, true , true};
+            case log_level::critical:
+                return level_default{log_level::critical, "CRITICAL", color::yellow , color::red    , true, true , true};
+        }
     };
 
-    struct level_default_settings : public level_default_settings_holder<std::vector<level_default>> {};
+    struct level_default_settings : public level_default_settings_holder<level_default> {};
 
     ///////////////////////////////////////////////////////////////
     //          LOGGER CLASS (creates new custom loggers)        //

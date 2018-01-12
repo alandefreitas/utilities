@@ -5,23 +5,27 @@ endif()
 include(FindPackageOnline)
 
 set(Boost_USE_STATIC_LIBS ON)
-set(boost_lib_names filesystem regex system iostreams date_time chrono timer thread coroutine log program_options serialization)
+set(boost_lib_names chrono filesystem regex system iostreams date_time timer thread coroutine log program_options serialization)
+find_package_online(Boost COMPONENTS ${boost_lib_names})
+find_package_online(OpenCL)
+find_package_online(Gnuplot)
+find_package_online(ThreadPool)
+find_package_online(JSON)
+find_package_online(Gnuplot-iostream)
+find_package_online(PrettyPrint)
+find_package_online(SimpleServer)
+find_package_online(TermColor)
+find_package_online(TypeString)
 
-find_package(Boost REQUIRED COMPONENTS ${boost_lib_names})
-find_package(OpenCL REQUIRED)
-find_package(Gnuplot REQUIRED)
+if (UNIX AND NOT APPLE)
+    set(LINUX_LIBS ${CMAKE_DL_LIBS} pthread rt)
+endif()
 
-find_package_online(ThreadPool REQUIRED)
-find_package_online(JSON REQUIRED)
-find_package_online(Gnuplot-iostream REQUIRED)
-find_package_online(PrettyPrint REQUIRED)
-find_package_online(SimpleServer REQUIRED)
-find_package_online(TermColor REQUIRED)
-find_package_online(TypeString REQUIRED)
 
 set(Utils_INCLUDE_DIRS
     ${Boost_INCLUDE_DIR}
-    SYSTEM ${OpenCL_INCLUDE_DIRS}
+#    SYSTEM
+    ${OpenCL_INCLUDE_DIRS}
     ${ThreadPool_INCLUDE_DIRS}
     ${JSON_INCLUDE_DIRS}
     ${Gnuplot-iostream_INCLUDE_DIRS}
@@ -33,12 +37,14 @@ set(Utils_INCLUDE_DIRS
     )
 
 set(Utils_LIBRARIES
+    ${LINUX_LIBS}
     ${Boost_LIBRARIES}
-    SYSTEM ${OpenCL_LIBRARIES}
+    ${OpenCL_LIBRARIES}
     ${ThreadPool_LIBRARIES}
     ${JSON_LIBRARIES}
     ${Gnuplot-iostream_LIBRARIES}
     ${PrettyPrint_LIBRARIES}
     ${SimpleServer_LIBRARIES}
     ${TermColor_LIBRARIES}
-    ${TypeString_LIBRARIES})
+    ${TypeString_LIBRARIES}
+    )

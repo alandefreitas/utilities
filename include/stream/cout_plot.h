@@ -80,18 +80,18 @@ namespace utils {
         double x_step_size = range_x / (plot.x_resolution);
         double y_step_size = range_y / (plot.y_resolution);
 
-        utils::table t(plot.y_resolution + 2, plot.x_resolution + 4);
+        utl::table t(plot.y_resolution + 2, plot.x_resolution + 4);
         t.border_height(0).border_size(0).padding(0).vertical_separator('1').horizontal_separator('2').corner_separator(
                 '3').min_width(1);
         // make axis
         t[0][0] = "y_axis";
-        t[0][0].text_color(utils::color::blue).bold(true);
+        t[0][0].text_color(utl::color::blue).bold(true);
         int x_zero_pos = std::ceil(((0.0 - min_x) / range_x) * (plot.x_resolution)) + 2;
         for (int i = 0; i < t.row_count(); ++i) {
             t[i][x_zero_pos] = "|";
         }
         t[t.row_count() - 1][t.column_count() - 1] = "x_axis";
-        t[t.row_count() - 1][t.column_count() - 1].text_color(utils::color::blue).bold(true);
+        t[t.row_count() - 1][t.column_count() - 1].text_color(utl::color::blue).bold(true);
         int y_zero_pos = t.row_count() - 2 - std::ceil(((0.00 - min_y) / range_y) * (plot.y_resolution));
         for (int i = 1; i < t.column_count()-1; ++i) {
             t[y_zero_pos][i] = "-";
@@ -108,7 +108,7 @@ namespace utils {
                 int x_pos = std::ceil(((x[j] - min_x) / range_x) * (plot.x_resolution)) + 2;
                 int y_pos = t.row_count() - 2 - std::ceil(((y[j] - min_y) / range_y) * (plot.y_resolution));
                 t[y_pos][x_pos] = "*";
-                t[y_pos][x_pos].text_color(utils::color((i+4)%9));
+                t[y_pos][x_pos].text_color(utl::color((i+4)%9));
             }
         }
         stream << t;

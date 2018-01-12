@@ -55,12 +55,12 @@ namespace utl {
         return t;
     }
 
-    int microtime_milliseconds() {
+    inline int microtime_milliseconds() {
         std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
         return ms.count();
     }
 
-    double microtime() {
+    inline double microtime() {
         using namespace std::chrono;
         std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
         double f = ms.count();
@@ -68,7 +68,7 @@ namespace utl {
         return f;
     }
 
-    double round(double v, int precision){
+    inline double round(double v, int precision){
         const double exp = std::pow(10,precision);
         return std::round(v*exp)/exp;
     }
@@ -142,7 +142,7 @@ namespace utl {
         }
     };
     
-    std::vector<int> range_vector(int start, int end, int step = 1){
+    inline std::vector<int> range_vector(int start, int end, int step = 1){
         if (start > end){
             return range_vector(end,start,step);
         }

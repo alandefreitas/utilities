@@ -203,14 +203,6 @@ int main() {
         vector<int> a = {2, 2, 1, 1, 2, 2, 1, 1, 2, 2};
         cout << "discrete(a): " << discrete(a) << endl;
         cout << "discrete(a): " << discrete(a) << endl;
-        cout << "discrete({2.0,2.0,1.0,1.0,2.0,2.0,1.0,1.0,2.0,2.0}): "
-                  << discrete({2.0, 2.0, 1.0, 1.0, 2.0, 2.0, 1.0, 1.0, 2.0, 2.0}) << endl;
-        cout << "discrete({2.0,2.0,1.0,1.0,2.0,2.0,1.0,1.0,2.0,2.0}): "
-                  << discrete({2.0, 2.0, 1.0, 1.0, 2.0, 2.0, 1.0, 1.0, 2.0, 2.0}) << endl;
-        cout << "vector<double> b = {2.0,2.0,1.0,1.0,2.0,2.0,1.0,1.0,2.0,2.0}; " << endl;
-        vector<double> b = {2.0, 2.0, 1.0, 1.0, 2.0, 2.0, 1.0, 1.0, 2.0, 2.0};
-        cout << "discrete(b): " << discrete(b) << endl;
-        cout << "discrete(b): " << discrete(b) << endl;
 
         cout << bold << underline << "Piecewise constant distribution" << reset
              << endl;

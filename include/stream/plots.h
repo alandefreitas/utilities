@@ -42,7 +42,7 @@ namespace utl {
         plot(x,y);
     }
 
-    void plot1(){
+    inline void plot1(){
         Gnuplot gp;
         // Create a script which can be manually fed into gnuplot later:
         //    Gnuplot gp(">script.gp");
@@ -91,7 +91,7 @@ namespace utl {
         gp.send1d(boost::make_tuple(pts_B_x, pts_B_y, pts_B_dx, pts_B_dy));
     }
 
-    void plot2(){
+    inline void plot2(){
         Gnuplot gp;
 
         std::vector<std::pair<double, double> > xy_pts_A;

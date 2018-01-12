@@ -31,46 +31,7 @@ using namespace utl;
 
 int main(int argc, const char *argv[])
 {
-    cout << bold << on_yellow << "Container numeric overloads" << reset << endl;
 
-    cout << bold << underline << "Operating on a container" << reset << endl;
-    {
-        vector<double> x1 = {3.4,2.5,2.6,4.6,3.5};
-        vector<double> x2 = {2.3,3.2,1.8,3.6,2.5};
-        vector<double> x3 = x1 + x2;
-        vector<double> x4 = x3 + 10.0;
-        vector<double> x5 = x4 * x2;
-        vector<double> x6 = x5 / x1;
-        cout << x6 << endl;
-    }
-
-    cout << bold << underline << "Operating on a container with scalars" << reset << endl;
-    {
-        vector<double> x1 = {3.4,2.5,2.6,4.6,3.5};
-        double x2 = 20.0;
-        vector<double> x3 = x1 * x2;
-        cout << x3 << endl;
-    }
-
-    cout << bold << underline << "Numerical attribution" << reset << endl;
-    {
-        vector<double> x1 = {3.4,2.5,2.6,4.6,3.5};
-        x1 += 20.0;
-        vector<double> x2 = {2.3,3.2,1.8,3.6,2.5};
-        x1 *= x2;
-        cout << x1 << endl;
-    }
-
-
-    cout << bold << underline << "2D operations" << reset << endl;
-    {
-        vector<vector<double>> x1 = {{3.4,2.5,2.6,4.6,3.5},{2.3,3.2,1.8,3.6,2.5}};
-        x1 += 20.0;
-        vector<vector<double>> x2 = {{3.4,2.5,2.6,4.6,3.5},{2.3,3.2,1.8,3.6,2.5}};
-        x1 += x2;
-        x1 *= x2;
-        cout << x1 << endl;
-    }
 
     cout << bold << on_yellow << "Automatic Relational Operators" << reset << endl;
 
@@ -555,5 +516,47 @@ int main(int argc, const char *argv[])
             cerr << ex.what() << '\n';
         }
     }
+
+    //    cout << bold << on_yellow << "Container numeric overloads" << reset << endl;
+//
+//    cout << bold << underline << "Operating on a container" << reset << endl;
+//    {
+//        vector<double> x1 = {3.4,2.5,2.6,4.6,3.5};
+//        vector<double> x2 = {2.3,3.2,1.8,3.6,2.5};
+//        vector<double> x3 = x1 + x2;
+//        vector<double> x4 = x3 + 10.0;
+//        vector<double> x5 = x4 * x2;
+//        vector<double> x6 = x5 / x1;
+//        cout << x6 << endl;
+//    }
+//
+//    cout << bold << underline << "Operating on a container with scalars" << reset << endl;
+//    {
+//        vector<double> x1 = {3.4,2.5,2.6,4.6,3.5};
+//        double x2 = 20.0;
+//        vector<double> x3 = x1 * x2;
+//        cout << x3 << endl;
+//    }
+//
+//    cout << bold << underline << "Numerical attribution" << reset << endl;
+//    {
+//        vector<double> x1 = {3.4,2.5,2.6,4.6,3.5};
+//        x1 += 20.0;
+//        vector<double> x2 = {2.3,3.2,1.8,3.6,2.5};
+//        x1 *= x2;
+//        cout << x1 << endl;
+//    }
+//
+//
+//    cout << bold << underline << "2D operations" << reset << endl;
+//    {
+//        vector<vector<double>> x1 = {{3.4,2.5,2.6,4.6,3.5},{2.3,3.2,1.8,3.6,2.5}};
+//        x1 += 20.0;
+//        vector<vector<double>> x2 = {{3.4,2.5,2.6,4.6,3.5},{2.3,3.2,1.8,3.6,2.5}};
+//        x1 += x2;
+//        x1 *= x2;
+//        cout << x1 << endl;
+//    }
+
     return 0;
 }

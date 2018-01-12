@@ -39,7 +39,7 @@ namespace utl {
         return termcolor::reverse(stream);
     }
 
-    using namespace boost::iostreams;
+    namespace iostreams = boost::iostreams;
 
     namespace filesystem = boost::filesystem;
 

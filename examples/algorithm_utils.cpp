@@ -124,9 +124,9 @@ int main()
     cout << bold << underline << "Create iterator for (boost) regex tokens on strings" << reset << endl;
     {
         string s = "The Boost C++ Libraries";
-        boost_regex expr{"[\\w+]+"};
-        copy(view::tokenize(s, expr, 0, boost_regex_constants::match_default), ostream_iterator<string>{cout, ","});
-        cout << endl;
+//        boost_regex expr{"[\\w+]+"};
+//        copy(view::tokenize(s, expr, 0, boost_regex_constants::match_default), ostream_iterator<string>{cout, ","});
+//        cout << endl;
     }
 
     cout << bold << underline << "Ranges of integers (without having to use a container)" << reset << endl;

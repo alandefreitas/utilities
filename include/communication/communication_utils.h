@@ -13,7 +13,6 @@
 #include <boost/asio/buffer.hpp>
 #include <boost/asio/ip/tcp.hpp>
 
-
 #include <boost/interprocess/shared_memory_object.hpp>
 #include <boost/interprocess/mapped_region.hpp>
 #include <boost/interprocess/managed_shared_memory.hpp>
@@ -35,7 +34,7 @@
 // Internal
 
 namespace utl {
-    using namespace boost::asio;
+    namespace asio = boost::asio;
     using namespace boost::asio::ip;
     namespace interprocess = boost::interprocess;
     typedef SimpleWeb::Server<SimpleWeb::HTTP> http_server;

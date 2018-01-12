@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <atomic>
+#include <chrono>
 
 #include "utils.h"
 
@@ -195,12 +196,12 @@ int main()
         compute::device device = compute::system::default_device();
         compute::context context(device);
         compute::command_queue queue(context, device, compute::command_queue::enable_profiling);
-        cout << "timer1 considers time to copy data" << endl;
-        cout << "timer2 ignores time to copy data" << endl;
-        boost::timer::cpu_timer timer;
-        boost::timer::cpu_timer timer2;
-        timer.stop();
-        timer2.stop();
+//        cout << "timer1 considers time to copy data" << endl;
+//        cout << "timer2 ignores time to copy data" << endl;
+//        cpu_timer timer;
+//        cpu_timer timer2;
+//        timer.stop();
+//        timer2.stop();
         string result1;
         string result2;
         string result3;
@@ -217,7 +218,7 @@ int main()
             // print data
             // cout << "Host data" << host_vector << endl;
 
-            timer.resume();
+//            timer.resume();
 
             // create a vector on the device
             compute::vector<float> device_vector(host_vector.size(), context);
@@ -225,7 +226,7 @@ int main()
             // transfer data from the host to the device
             compute::copy(host_vector.begin(), host_vector.end(), device_vector.begin(), queue);
 
-            timer2.resume();
+//            timer2.resume();
 
             // calculate the square-root of each element in-place
             compute::transform(
@@ -271,27 +272,27 @@ int main()
                     queue
             );
 
-            timer2.stop();
+//            timer2.stop();
 
             // Copy values back to the host
             compute::copy(
                     device_vector.begin(), device_vector.end(), host_vector.begin(), queue
             );
 
-            timer.stop();
+//            timer.stop();
 
-            // cout << timer.format() << '\n';
-            // cout << timer2.format() << '\n';
+//            // cout << timer.format() << '\n';
+//            // cout << timer2.format() << '\n';
 
             // print values
             // cout << "Host data returned" << host_vector << endl;
 
         }
         cout << endl;
-        result1 = timer.format();
-        result3 = timer2.format();
-        timer.start();
-        timer.stop();
+//        result1 = timer.format();
+//        result3 = timer2.format();
+//        timer.start();
+//        timer.stop();
         cout << bold << underline << "Transforming data sequentially for comparison" << reset << endl;
 
         p.reset(goal,20);
@@ -304,7 +305,7 @@ int main()
 
             // cout << "Host data: " << host_vector << endl;
 
-            timer.resume();
+//            timer.resume();
 
             // calculate the square-root of each element in-place
             transform(
@@ -344,14 +345,14 @@ int main()
                     [](float x){return sqrt(x);}
             );
 
-            timer.stop();
+//            timer.stop();
 
-            // cout << timer.format() << '\n';
+//            // cout << timer.format() << '\n';
 
             // cout << "Host data returned" << host_vector << endl;
 
         }
-        result2 = timer.format();
+//        result2 = timer.format();
 
         cout << endl;
         cout << endl;

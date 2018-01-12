@@ -24,8 +24,8 @@
 #include <boost/program_options.hpp>
 
 // INTERNAL
-// stl overloads
-#include "container_overloads.h"
+// stl overloads (to be replaced by a wrapper that inherits container and adds numeric functions)
+//#include "container_overloads.h"
 // container functions
 #include "matlab_utils.h"
 #include "php_utils.h"

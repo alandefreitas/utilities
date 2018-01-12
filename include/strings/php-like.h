@@ -24,17 +24,17 @@
 
 namespace utl {
     // Determine if a given std::string contains a given substd::string.
-    bool contains(std::string const & haystack, std::string needle)
+    inline bool contains(std::string const & haystack, std::string needle)
     {
         return haystack.find(needle) != std::string::npos;
     }
 
-    std::string lower(std::string value)
+    inline std::string lower(std::string value)
     {
         return boost::algorithm::to_lower_copy(value);
     }
 
-    bool ctype_lower(std::string str){
+    inline bool ctype_lower(std::string str){
         for (char &c : str) {
             if (!islower(c)){
                 return false;
@@ -43,22 +43,22 @@ namespace utl {
         return true;
     }
 
-    std::string preg_replace(std::regex pattern, std::string replacement, std::string subject)
+    inline std::string preg_replace(std::regex pattern, std::string replacement, std::string subject)
     {
         return std::regex_replace(subject,pattern,replacement);
     }
 
-    std::string preg_replace(std::string pattern, std::string replacement, std::string subject)
+    inline std::string preg_replace(std::string pattern, std::string replacement, std::string subject)
     {
         return std::regex_replace(subject,std::regex(pattern),replacement);
     }
 
-    std::string preg_replace(const char* pattern, std::string replacement, std::string subject)
+    inline std::string preg_replace(const char* pattern, std::string replacement, std::string subject)
     {
         return std::regex_replace(subject,std::regex(std::string(pattern)),replacement);
     }
 
-    std::string preg_replace(std::regex pattern, std::string replacement, std::string subject, int limit)
+    inline std::string preg_replace(std::regex pattern, std::string replacement, std::string subject, int limit)
     {
         if (limit >= 0){
             for (int i = 0; i < limit; ++i) {
@@ -68,17 +68,17 @@ namespace utl {
         return subject;
     }
 
-    std::string preg_replace(std::string pattern, std::string replacement, std::string subject, int limit)
+    inline std::string preg_replace(std::string pattern, std::string replacement, std::string subject, int limit)
     {
         return utl::preg_replace(std::regex(pattern),replacement,subject,limit);
     }
 
-    std::string preg_replace(const char* pattern, std::string replacement, std::string subject, int limit)
+    inline std::string preg_replace(const char* pattern, std::string replacement, std::string subject, int limit)
     {
         return utl::preg_replace(std::regex(std::string(pattern)),replacement,subject,limit);
     }
 
-    std::string snake(std::string value, std::string delimiter = "_")
+    inline std::string snake(std::string value, std::string delimiter = "_")
     {
         std::string key = value;
 
@@ -124,42 +124,42 @@ namespace utl {
         return v;
     };
 
-    std::string implode(std::string separator, std::vector<std::string> input)
+    inline std::string implode(std::string separator, std::vector<std::string> input)
     {
         return boost::algorithm::join(input,separator);
     };
 
     template<typename string_type>
-    string_type implode(string_type separator, std::vector<string_type> input)
+    inline string_type implode(string_type separator, std::vector<string_type> input)
     {
         return boost::algorithm::join(input,separator);
     };
 
 
-    std::string trim(std::string input, std::string charlist = " \t\n\r\0\x0B")
+    inline std::string trim(std::string input, std::string charlist = " \t\n\r\0\x0B")
     {
         return boost::algorithm::trim_copy_if(input,boost::is_any_of(charlist));
     };
 
-    std::string rtrim(std::string input, std::string charlist = " \t\n\r\0\x0B")
+    inline std::string rtrim(std::string input, std::string charlist = " \t\n\r\0\x0B")
     {
         return boost::algorithm::trim_right_copy_if(input,boost::is_any_of(charlist));
     };
 
-    std::string ltrim(std::string input, std::string charlist = " \t\n\r\0\x0B")
+    inline std::string ltrim(std::string input, std::string charlist = " \t\n\r\0\x0B")
     {
         return boost::algorithm::trim_left_copy_if(input, boost::is_any_of(charlist));
     };
 
-    std::string strtolower(std::string s){
+    inline std::string strtolower(std::string s){
         return boost::algorithm::to_lower_copy(s);
     }
 
-    size_t strpos(std::string haystack, std::string needle){
+    inline size_t strpos(std::string haystack, std::string needle){
         return haystack.find(needle);
     }
 
-    std::vector<std::string> preg_split(std::regex r, std::string s, bool PREG_SPLIT_NO_EMPTY = false, bool DELIM_CAPTURE = false)
+    inline std::vector<std::string> preg_split(std::regex r, std::string s, bool PREG_SPLIT_NO_EMPTY = false, bool DELIM_CAPTURE = false)
     {
         std::vector<std::string> splits;
         std::smatch m;
@@ -185,26 +185,23 @@ namespace utl {
         return splits;
     }
 
-    std::vector<std::string> preg_split(const char* r, std::string s, bool PREG_SPLIT_NO_EMPTY = false, bool DELIM_CAPTURE = false){
+    inline std::vector<std::string> preg_split(const char* r, std::string s, bool PREG_SPLIT_NO_EMPTY = false, bool DELIM_CAPTURE = false){
         return preg_split(std::regex(std::string(r)),s,PREG_SPLIT_NO_EMPTY,DELIM_CAPTURE);
     }
 
-    std::vector<std::string> preg_split(std::string r, std::string s, bool PREG_SPLIT_NO_EMPTY = false, bool DELIM_CAPTURE = false){
+    inline std::vector<std::string> preg_split(std::string r, std::string s, bool PREG_SPLIT_NO_EMPTY = false, bool DELIM_CAPTURE = false){
         return preg_split(std::regex(r),s,PREG_SPLIT_NO_EMPTY,DELIM_CAPTURE);
     }
 
-
-
-
-    std::string str_to_lower(std::string str){
+    inline std::string str_to_lower(std::string str){
         return boost::algorithm::to_lower_copy(str);
     }
 
-    std::string str_replace(std::string search, std::string replace, std::string subject){
+    inline std::string str_replace(std::string search, std::string replace, std::string subject){
         return boost::algorithm::replace_all_copy(subject, search, replace);
     }
 
-    std::string str_replace(std::vector<std::string> search, std::string replace, std::string subject){
+    inline std::string str_replace(std::vector<std::string> search, std::string replace, std::string subject){
         std::string r = subject;
         for (std::string &s : search) {
             boost::algorithm::replace_all(r, s, replace);
@@ -212,7 +209,7 @@ namespace utl {
         return r;
     }
 
-    std::string ucfirst(std::string str){
+    inline std::string ucfirst(std::string str){
         if (str.empty()){
             return str;
         } else if (!islower(str[0])){
@@ -223,7 +220,7 @@ namespace utl {
         }
     }
 
-    std::string filter_var_int(std::string variable) {
+    inline std::string filter_var_int(std::string variable) {
         std::string filtered;
         // copy only numbers, +, and -:
         auto it = std::copy_if (variable.begin(), variable.end(), std::back_inserter(filtered), [](char c){

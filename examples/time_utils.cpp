@@ -330,7 +330,7 @@ int main()
 
     cout << bold << underline << "Changing names of weekdays and months" << reset << endl;
     {
-        locale::global(locale{"de_DE"});
+        // locale::global(locale{"de_DE"});
         // locale::global(locale{"German"}); // on windows
         string months[12]{"Januar", "Februar", "M\xe4rz", "April",
                                "Mai", "Juni", "Juli", "August", "September", "Oktober",

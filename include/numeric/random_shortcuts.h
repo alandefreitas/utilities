@@ -7,6 +7,7 @@
 
 
 #include <random>
+#include <chrono>
 #include <type_traits>
 
 namespace utl {
@@ -35,10 +36,16 @@ namespace utl {
         return result;
     }
 
-    template <class T = double>
+    template <typename T = double, std::enable_if_t<std::is_floating_point<T>::value>* = nullptr>
     T rand(T lower_bound, T upper_bound){
         static std::default_random_engine generator((int) std::chrono::system_clock::now().time_since_epoch().count());
         return std::uniform_real_distribution<T>(lower_bound,upper_bound)(generator);
+    }
+
+    template <typename T = double, std::enable_if_t<!std::is_floating_point<T>::value>* = nullptr>
+    T rand(T lower_bound, T upper_bound){
+        static std::default_random_engine generator((int) std::chrono::system_clock::now().time_since_epoch().count());
+        return std::uniform_int_distribution<T>(lower_bound,upper_bound)(generator);
     }
 
     template <typename T, std::enable_if_t<std::is_integral<T>::value>* = nullptr>
@@ -236,22 +243,10 @@ namespace utl {
     //                Piecewise distributions                     //
     ////////////////////////////////////////////////////////////////
 
-    template <typename T = double, typename I = int, std::enable_if_t<std::is_floating_point<T>::value>* = nullptr, std::enable_if_t<std::is_integral<I>::value>* = nullptr>
-    I discrete(const std::initializer_list<T> l){
-        static std::default_random_engine generator((int) std::chrono::system_clock::now().time_since_epoch().count());
-        return std::discrete_distribution<T>(l)(generator);
-    }
-
     template <typename T = int, typename I = int, std::enable_if_t<std::is_integral<T>::value>* = nullptr, std::enable_if_t<std::is_integral<I>::value>* = nullptr>
     I discrete(const std::initializer_list<T> l){
         static std::default_random_engine generator((int) std::chrono::system_clock::now().time_since_epoch().count());
         return std::discrete_distribution<T>(l.begin(),l.end())(generator);
-    }
-
-    template<template<class B, class All = std::allocator<B> > class C, class T = double, class I = int, std::enable_if_t<std::is_floating_point<T>::value>* = nullptr, std::enable_if_t<std::is_integral<I>::value>* = nullptr>
-    I discrete(const C<T>& c) {
-        static std::default_random_engine generator((int) std::chrono::system_clock::now().time_since_epoch().count());
-        return std::discrete_distribution<T>(c.begin(),c.end())(generator);
     }
 
     template<template<class B, class All = std::allocator<B> > class C, class T = double, class I = int, std::enable_if_t<std::is_integral<T>::value>* = nullptr, std::enable_if_t<std::is_integral<I>::value>* = nullptr>

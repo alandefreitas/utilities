@@ -16,7 +16,7 @@ int main()
 {
     const bool run_interprocess_examples = false;
 
-    io_service ioservice;
+    asio::io_service ioservice;
     tcp::resolver resolv{ioservice};
     tcp::socket tcp_socket{ioservice};
     array<char, 4096> bytes;
@@ -30,28 +30,28 @@ int main()
     cout << bold << underline << "ASIO's steady timer" << reset
               << endl;
     {
-        io_service ioservice;
-        steady_timer timer{ioservice, chrono::seconds{3}};
+        asio::io_service ioservice;
+        asio::steady_timer timer{ioservice, chrono::seconds{3}};
         timer.async_wait([](const boost::system::error_code &ec) { cout << "3 sec\n"; });
         ioservice.run();
     }
 
     cout << bold << underline << "Two asynchronous ASIO's steady timer" << reset << endl;
     {
-        io_service ioservice;
-        steady_timer timer1{ioservice, chrono::seconds{3}};
+        asio::io_service ioservice;
+        asio::steady_timer timer1{ioservice, chrono::seconds{3}};
         timer1.async_wait([](const boost::system::error_code &ec) { cout << "3 sec\n"; });
-        steady_timer timer2{ioservice, chrono::seconds{4}};
+        asio::steady_timer timer2{ioservice, chrono::seconds{4}};
         timer2.async_wait([](const boost::system::error_code &ec) { cout << "4 sec\n"; });
         ioservice.run();
     }
 
     cout << bold << underline << "Two asynchronous ASIO's steady timers running on threads" << reset << endl;
     {
-        io_service ioservice;
-        steady_timer timer1{ioservice, chrono::seconds{3}};
+        asio::io_service ioservice;
+        asio::steady_timer timer1{ioservice, chrono::seconds{3}};
         timer1.async_wait([](const boost::system::error_code &ec) { cout << "3 sec\n"; });
-        steady_timer timer2{ioservice, chrono::seconds{4}};
+        asio::steady_timer timer2{ioservice, chrono::seconds{4}};
         timer2.async_wait([](const boost::system::error_code &ec) { cout << "4 sec\n"; });
         // run() is called on the only I/O service object in each thread
         // I/O service object to use both threads to execute handlers
@@ -65,11 +65,11 @@ int main()
     cout << bold << underline << "One thread for each of two I/O service objects to execute handlers concurrently" << reset << endl;
     {
         // However, instead of providing several threads to one I/O service object, you could also create multiple I/O service objects.
-        io_service ioservice1;
-        io_service ioservice2;
-        steady_timer timer1{ioservice1, chrono::seconds{3}};
+        asio::io_service ioservice1;
+        asio::io_service ioservice2;
+        asio::steady_timer timer1{ioservice1, chrono::seconds{3}};
         timer1.async_wait([](const boost::system::error_code &ec) { cout << "3 sec\n"; });
-        steady_timer timer2{ioservice2, chrono::seconds{3}};
+        asio::steady_timer timer2{ioservice2, chrono::seconds{3}};
         timer2.async_wait([](const boost::system::error_code &ec) { cout << "3 sec\n"; });
         thread thread1{[&ioservice1]() { ioservice1.run(); }};
         thread thread2{[&ioservice2]() { ioservice2.run(); }};
@@ -88,7 +88,7 @@ int main()
                                        size_t bytes_transferred) {
             if (!ec) {
                 cout.write(bytes.data(), bytes_transferred);
-                tcp_socket.async_read_some(buffer(bytes), read_handler);
+                tcp_socket.async_read_some(asio::buffer(bytes), read_handler);
             }
         };
 
@@ -96,8 +96,8 @@ int main()
             if (!ec) {
                 string r =
                         "GET / HTTP/1.1\r\nHost: theboostcpplibraries.com\r\n\r\n";
-                write(tcp_socket, buffer(r));
-                tcp_socket.async_read_some(buffer(bytes), read_handler);
+                write(tcp_socket, asio::buffer(r));
+                tcp_socket.async_read_some(asio::buffer(bytes), read_handler);
             }
         };
 
@@ -129,7 +129,7 @@ int main()
             if (!ec) {
                 time_t now = time(nullptr);
                 data = ctime(&now);
-                async_write(tcp_socket, buffer(data), write_handler);
+                async_write(tcp_socket, asio::buffer(data), write_handler);
             }
         };
 

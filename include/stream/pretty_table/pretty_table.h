@@ -379,7 +379,7 @@ namespace utl {
     };
 
     // create string with the char c many times
-    std::string repeat(unsigned times, char c) {
+    inline std::string repeat(unsigned times, char c) {
         std::string result;
         for (; times > 0; --times) {
             result += c;
@@ -387,7 +387,7 @@ namespace utl {
         return result;
     }
 
-    std::string table::border() const {
+    inline std::string table::border() const {
         std::string result;
         result += repeat(border_size(), _corner);
         for (auto width = _width.begin(); width != _width.end(); ++width) {
@@ -397,7 +397,7 @@ namespace utl {
         return result;
     }
 
-    std::ostream &stream_aligned_text(std::ostream &stream, table &table, alignment a, std::string text, int width) {
+    inline std::ostream &stream_aligned_text(std::ostream &stream, table &table, alignment a, std::string text, int width) {
         switch (a) {
             case alignment::center:
                 stream << std::setw(width) << centered(text);
@@ -414,7 +414,7 @@ namespace utl {
         return stream;
     }
 
-    std::ostream &
+    inline std::ostream &
     stream_text_properties(std::ostream &stream, bool bold, bool underline, color color_, color background_) {
         if (bold) {
             stream << termcolor::bold;
@@ -485,7 +485,7 @@ namespace utl {
         return stream;
     }
 
-    std::ostream &stream_table_line(std::ostream &stream, table &table, utl::row row) {
+    inline std::ostream &stream_table_line(std::ostream &stream, table &table, utl::row row) {
         stream_text_properties(stream, table.border_bold(), table.border_underline(), table.border_color(),
                                table.border_backgroung());
         for (int i = 0; i < table.border_size(); ++i) {
@@ -520,7 +520,7 @@ namespace utl {
         return stream;
     }
 
-    std::ostream &stream_border_line(std::ostream &stream, table &table) {
+    inline std::ostream &stream_border_line(std::ostream &stream, table &table) {
         for (int i = 0; i < table.border_height(); ++i) {
             stream_text_properties(stream, table.border_bold(), table.border_underline(), table.border_color(),
                                    table.border_backgroung());
@@ -531,7 +531,7 @@ namespace utl {
         return stream;
     }
 
-    std::ostream &operator<<(std::ostream &stream, table &table) {
+    inline std::ostream &operator<<(std::ostream &stream, table &table) {
         table.setup();
         stream_border_line(stream, table);
         for (auto rowIterator = table.rows().begin(); rowIterator != table.rows().end(); ++rowIterator) {
@@ -541,7 +541,7 @@ namespace utl {
         return stream;
     }
 
-    table::table(const std::string &filename, char sep, const datatype &type)
+    inline table::table(const std::string &filename, char sep, const datatype &type)
             : _type(type), _sep(sep) {
         std::string line;
         if (type == file) {
@@ -581,7 +581,7 @@ namespace utl {
         }
     }
 
-    void table::parse_header(void) {
+    inline void table::parse_header(void) {
         std::stringstream ss(_original_file[0]);
         std::string item;
 
@@ -590,7 +590,7 @@ namespace utl {
         }
     }
 
-    void table::parse_content(void) {
+    inline void table::parse_content(void) {
         std::vector<std::string>::iterator it;
 
         it = _original_file.begin();
@@ -623,34 +623,34 @@ namespace utl {
         }
     }
 
-    row &table::get_row(unsigned int row_number) {
+    inline row &table::get_row(unsigned int row_number) {
         return _rows.at(row_number);
     }
 
-    row &table::operator[](unsigned int row_number) {
+    inline row &table::operator[](unsigned int row_number) {
         return table::get_row(row_number);
     }
 
-    unsigned int table::row_count(void) const {
+    inline unsigned int table::row_count(void) const {
         return _rows.size();
     }
 
-    unsigned int table::column_count(void) const {
+    inline unsigned int table::column_count(void) const {
         return _rows[0].size();
     }
 
-    std::vector<std::string> table::get_header(void) const {
+    inline std::vector<std::string> table::get_header(void) const {
         return _header;
     }
 
-    const std::string table::get_header_element(unsigned int pos) const {
+    inline const std::string table::get_header_element(unsigned int pos) const {
         if (pos >= _header.size()) {
             throw error("can't return this header (doesn't exist)");
         }
         return _header[pos];
     }
 
-    bool table::delete_row(unsigned int pos) {
+    inline bool table::delete_row(unsigned int pos) {
         if (pos < _rows.size()) {
             _rows.erase(_rows.begin() + pos);
             return true;
@@ -658,7 +658,7 @@ namespace utl {
         return false;
     }
 
-    bool table::add_row(unsigned int pos, const std::vector<std::string> &r) {
+    inline bool table::add_row(unsigned int pos, const std::vector<std::string> &r) {
         row temp_row(_header);
 
         for (auto it = r.begin(); it != r.end(); it++) {
@@ -672,7 +672,7 @@ namespace utl {
         return false;
     }
 
-    void table::sync(void) const {
+    inline void table::sync(void) const {
         if (_type == datatype::file) {
             std::ofstream f;
             f.open(_file, std::ios::out | std::ios::trunc);
@@ -696,7 +696,7 @@ namespace utl {
         }
     }
 
-    const std::string &table::get_filename(void) const {
+    inline const std::string &table::get_filename(void) const {
         return _file;
     }
 

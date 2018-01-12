@@ -192,8 +192,8 @@ int main()
     cout << bold << underline << "Using an array as a device with iostreams::array_sink" << reset << endl;
     {
         char buffer[16];
-        array_sink sink{buffer};
-        stream<array_sink> os{sink};
+        iostreams::array_sink sink{buffer};
+        iostreams::stream<iostreams::array_sink> os{sink};
         os << "WoRd" << flush;
         cout.write(buffer, 5);
         cout << endl;
@@ -202,12 +202,12 @@ int main()
     cout << bold << underline << "Using an array as a device with iostreams::array_source" << reset << endl;
     {
         char buffer[16];
-        array_sink sink{buffer};
-        stream<array_sink> os{sink};
+        iostreams::array_sink sink{buffer};
+        iostreams::stream<iostreams::array_sink> os{sink};
         os << "WoRd" << endl;
 
-        array_source source{buffer};
-        stream<array_source> is{source};
+        iostreams::array_source source{buffer};
+        iostreams::stream<iostreams::array_source> is{source};
         string s;
         is >> s;
         cout << s << '\n';
@@ -217,11 +217,11 @@ int main()
     {
         vector<char> v;
         back_insert_device<vector<char>> sink{v};
-        stream<back_insert_device<vector<char>>> os{sink};
+        iostreams::stream<back_insert_device<vector<char>>> os{sink};
         os << "WoRd" << endl;
 
-        array_source source{v.data(), v.size()};
-        stream<array_source> is{source};
+        iostreams::array_source source{v.data(), v.size()};
+        iostreams::stream<iostreams::array_source> is{source};
         string s;
         is >> s;
         cout << s << '\n';
@@ -229,10 +229,10 @@ int main()
 
     cout << bold << underline << "Using a file as a device with iostreams::file_source" << reset << endl;
     {
-        file_source f{"main.cpp"};
+        iostreams::file_source f{"main.cpp"};
         if (f.is_open())
         {
-            stream<file_source> is{f};
+            iostreams::stream<iostreams::file_source> is{f};
             cout << is.rdbuf() << '\n';
             f.close();
         }
@@ -243,9 +243,9 @@ int main()
     cout << bold << underline << "Using iostreams::regex_filter" << reset << endl;
     {
         char buffer[16];
-        array_sink sink{buffer};
-        filtering_ostream os;
-        os.push(regex_filter{boost_regex{"Bo+st"}, "C++"});
+        iostreams::array_sink sink{buffer};
+        iostreams::filtering_ostream os;
+        os.push(iostreams::regex_filter{boost_regex{"Bo+st"}, "C++"});
         os.push(sink);
         os << "WoRd" << flush;
         os.pop();
@@ -256,13 +256,13 @@ int main()
     cout << bold << underline << "Accessing filters in iostreams::filtering_ostream" << reset << endl;
     {
         char buffer[16];
-        array_sink sink{buffer};
-        filtering_ostream os;
-        os.push(counter{});
+        iostreams::array_sink sink{buffer};
+        iostreams::filtering_ostream os;
+        os.push(iostreams::counter{});
         os.push(sink);
         os << "WoRd" << flush;
         os.pop();
-        counter *c = os.component<counter>(0);
+        iostreams::counter *c = os.component<iostreams::counter>(0);
         cout << c->characters() << '\n';
         cout << c->lines() << '\n';
     }

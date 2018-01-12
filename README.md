@@ -26,7 +26,7 @@ This library includes many useful utilities for C++.
     * Any-data variable
     * Optional data 
     * Property trees
-    * Tribooleans with true, false, and indeterminate
+    * Tribooleans (true, false, and indeterminate)
     * Variant data
     * Fusion tuples
     * Heterogeneous vectors
