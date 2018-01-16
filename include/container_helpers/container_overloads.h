@@ -16,7 +16,9 @@
 #include <limits>
 #include <fstream>
 #include <sstream>
+
 #include "prettyprint.hpp"
+#include "../paradigms/traits.hpp"
 
 namespace utl {
 
@@ -24,63 +26,72 @@ namespace utl {
     //           NUMERIC OPERATORS           //
     ///////////////////////////////////////////
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T> operator+(const C<T>& a, const C<T2> b) {
-        C<T> result;
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && utl::is_container_of_scalar<Container2>::value,Container>::type
+    addition(Container & a, Container2 & b) {
+        Container result;
         if (a.size() == b.size()){
             result.reserve(a.size());
-            transform(a.begin(), a.end(), b.begin(),
-                      std::back_inserter(result), std::plus<T>());
+            std::transform(a.begin(), a.end(), b.begin(),
+                      std::back_inserter(result), std::plus<typename Container::value_type>());
         } else {
-            std::cerr << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return result;
     }
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T> operator-(const C<T>& a, const C<T2> b) {
-        C<T> result;
+
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && utl::is_container_of_scalar<Container2>::value,Container>::type
+    subtraction(Container & a, Container2 & b) {
+        Container result;
         if (a.size() == b.size()){
             result.reserve(a.size());
-            transform(a.begin(), a.end(), b.begin(),
-                      std::back_inserter(result), std::minus<T>());
+            std::transform(a.begin(), a.end(), b.begin(),
+                      std::back_inserter(result), std::minus<typename Container::value_type>());
         } else {
-            std::cerr << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return result;
     }
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T> operator*(const C<T>& a, const C<T2> b) {
-        C<T> result;
+
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && utl::is_container_of_scalar<Container2>::value,Container>::type
+    multiplication(Container & a, Container2 & b) {
+        Container result;
         if (a.size() == b.size()){
             result.reserve(a.size());
-            transform(a.begin(), a.end(), b.begin(),
-                      std::back_inserter(result), std::multiplies<T>());
+            std::transform(a.begin(), a.end(), b.begin(),
+                      std::back_inserter(result), std::multiplies<typename Container::value_type>());
         } else {
-            std::cerr << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return result;
     }
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T> operator/(const C<T>& a, const C<T2> b) {
-        C<T> result;
+
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && utl::is_container_of_scalar<Container2>::value,Container>::type
+    division(Container & a, Container2 & b) {
+        Container result;
         if (a.size() == b.size()){
             result.reserve(a.size());
-            transform(a.begin(), a.end(), b.begin(),
-                      std::back_inserter(result), std::divides<T>());
+            std::transform(a.begin(), a.end(), b.begin(),
+                      std::back_inserter(result), std::divides<typename Container::value_type>());
         } else {
-            std::cerr << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return result;
     }
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T> operator%(const C<T>& a, const C<T2> b) {
-        C<T> result;
+
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && utl::is_container_of_scalar<Container2>::value,Container>::type
+    module(Container & a, Container2 & b) {
+        Container result;
         if (a.size() == b.size()){
             result.reserve(a.size());
-            transform(a.begin(), a.end(), b.begin(),
-                      std::back_inserter(result), std::modulus<T>());
+            std::transform(a.begin(), a.end(), b.begin(),
+                      std::back_inserter(result), std::modulus<typename Container::value_type>());
         } else {
-            std::cerr << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return result;
     }
@@ -89,38 +100,47 @@ namespace utl {
     //       NUMERIC OPERATORS (+SCALAR)     //
     ///////////////////////////////////////////
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T> operator+(const C<T>& v, const T2 alfa) {
-        C<T> result(v.begin(),v.end());
-        std::for_each(result.begin(),result.end(),[&](T &x){x += (T) alfa;});
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
+    addition(Container & a, Scalar alfa) {
+        Container result(a.begin(),a.end());
+        std::for_each(result.begin(),result.end(),[&](typename Container::value_type &x){x += (typename Container::value_type) alfa;});
         return result;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T> operator-(const C<T> &v, const T2 alfa) {
-        C<T> result(v.begin(), v.end());
-        std::for_each(result.begin(), result.end(), [&](T &x) { x -= (T) alfa; });
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
+    subtraction(typename std::enable_if<utl::is_container_of_scalar<Container>::value,Container>::type & a,
+                   typename std::enable_if<std::is_scalar<Scalar>::value,Scalar>::type alfa) {
+        Container result(a.begin(), a.end());
+        std::for_each(result.begin(), result.end(), [&](typename Container::value_type &x) { x -= (typename Container::value_type) alfa; });
         return result;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T> operator*(const C<T> &v, const T2 alfa) {
-        C<T> result(v.begin(), v.end());
-        std::for_each(result.begin(), result.end(), [&](T &x) { x *= (T) alfa; });
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
+    multiplication(typename std::enable_if<utl::is_container_of_scalar<Container>::value,Container>::type & a,
+                         typename std::enable_if<std::is_scalar<Scalar>::value,Scalar>::type alfa) {
+        Container result(a.begin(), a.end());
+        std::for_each(result.begin(), result.end(), [&](typename Container::value_type &x) { x *= (typename Container::value_type) alfa; });
         return result;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T> operator/(const C<T> &v, const T2 alfa) {
-        C<T> result(v.begin(), v.end());
-        std::for_each(result.begin(), result.end(), [&](T &x) { x /= (T) alfa; });
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
+    division(typename std::enable_if<utl::is_container_of_scalar<Container>::value,Container>::type & a,
+                      typename std::enable_if<std::is_scalar<Scalar>::value,Scalar>::type alfa) {
+        Container result(a.begin(), a.end());
+        std::for_each(result.begin(), result.end(), [&](typename Container::value_type &x) { x /= (typename Container::value_type) alfa; });
         return result;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T> operator%(const C<T>& v, const T2 alfa) {
-        C<T> result(v.begin(),v.end());
-        std::for_each(result.begin(),result.end(),[&](T &x){x %= (T) alfa;});
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
+    module(typename std::enable_if<utl::is_container_of_scalar<Container>::value,Container>::type & a,
+                      typename std::enable_if<std::is_scalar<Scalar>::value,Scalar>::type alfa) {
+        Container result(a.begin(),a.end());
+        std::for_each(result.begin(),result.end(),[&](typename Container::value_type &x){x %= (typename Container::value_type) alfa;});
         return result;
     }
 
@@ -128,57 +148,62 @@ namespace utl {
     //         NUMERICAL ATTRIBUTION         //
     ///////////////////////////////////////////
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T>& operator+=(C<T>& a, const C<T2> b) {
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && utl::is_container_of_scalar<Container2>::value,Container>::type&
+    addition_in_place(Container & a, Container2 & b) {
         if (a.size() == b.size()){
-            transform(a.begin(), a.end(), b.begin(),
-                      a.begin(), std::plus<T>());
+            std::transform(a.begin(), a.end(), b.begin(),
+                      a.begin(), std::plus<typename Container::value_type>());
         } else {
-            std::cout << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return a;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T>& operator-=(C<T>& a, const C<T2> b) {
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && utl::is_container_of_scalar<Container2>::value,Container>::type&
+    subtraction_in_place(Container & a, Container2 & b) {
         if (a.size() == b.size()){
-            transform(a.begin(), a.end(), b.begin(),
-                      a.begin(), std::minus<T>());
+            std::transform(a.begin(), a.end(), b.begin(),
+                      a.begin(), std::minus<typename Container::value_type>());
         } else {
-            std::cout << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return a;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T>& operator*=(C<T>& a, const C<T2> b) {
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && utl::is_container_of_scalar<Container2>::value,Container>::type&
+    multiplication_in_place(Container & a, Container2 & b) {
         if (a.size() == b.size()){
-            transform(a.begin(), a.end(), b.begin(),
-                      a.begin(), std::multiplies<T>());
+            std::transform(a.begin(), a.end(), b.begin(),
+                      a.begin(), std::multiplies<typename Container::value_type>());
         } else {
-            std::cout << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return a;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T>& operator/=(C<T>& a, const C<T2> b) {
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && utl::is_container_of_scalar<Container2>::value,Container>::type&
+    division_in_place(Container & a, Container2 & b) {
         if (a.size() == b.size()){
-            transform(a.begin(), a.end(), b.begin(),
-                      a.begin(), std::divides<T>());
+            std::transform(a.begin(), a.end(), b.begin(),
+                      a.begin(), std::divides<typename Container::value_type>());
         } else {
-            std::cout << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return a;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T>& operator%=(C<T>& a, const C<T2> b) {
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && utl::is_container_of_scalar<Container2>::value,Container>::type&
+    module_in_place(Container & a, Container2 & b) {
         if (a.size() == b.size()){
-            transform(a.begin(), a.end(), b.begin(),
-                      a.begin(), std::modulus<T>());
+            std::transform(a.begin(), a.end(), b.begin(),
+                      a.begin(), std::modulus<typename Container::value_type>());
         } else {
-            std::cout << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return a;
     }
@@ -187,101 +212,116 @@ namespace utl {
     //     NUMERICAL ATTRIBUTION (SCALAR)    //
     ///////////////////////////////////////////
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T>& operator+=(C<T>& v, const T2 alfa) {
-        std::for_each(v.begin(),v.end(),[&](T &x){x += alfa;});
-        return v;
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type&
+    addition_in_place(Container & a, Scalar alfa) {
+        std::for_each(a.begin(),a.end(),[&](typename Container::value_type &x){x += alfa;});
+        return a;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T>& operator-=(C<T>& v, const T2 alfa) {
-        std::for_each(v.begin(),v.end(),[&](T &x){x -= alfa;});
-        return v;
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type&
+    subtraction_in_place(Container & a, Scalar alfa) {
+        std::for_each(a.begin(),a.end(),[&](typename Container::value_type &x){x -= alfa;});
+        return a;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T>& operator*=(C<T>& v, const T2 alfa) {
-        std::for_each(v.begin(),v.end(),[&](T &x){x *= alfa;});
-        return v;
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type&
+    multiplication_in_place(Container & a, Scalar alfa) {
+        std::for_each(a.begin(),a.end(),[&](typename Container::value_type &x){x *= alfa;});
+        return a;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T>& operator/=(C<T>& v, const T2 alfa) {
-        std::for_each(v.begin(),v.end(),[&](T &x){x /= alfa;});
-        return v;
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type&
+    division_in_place(Container & a, Scalar alfa) {
+        std::for_each(a.begin(),a.end(),[&](typename Container::value_type &x){x /= alfa;});
+        return a;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<T>& operator%=(C<T>& v, const T2 alfa) {
-        std::for_each(v.begin(),v.end(),[&](T &x){x %= alfa;});
-        return v;
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type&
+    module_in_place(Container & a, Scalar alfa) {
+        std::for_each(a.begin(),a.end(),[&](typename Container::value_type &x){x %= alfa;});
+        return a;
     }
 
     ////////////////////////////////////////
-    //     2-DIMENSIONAL CONTAINERS       //
+    //     N-DIMENSIONAL CONTAINERS       //
     ////////////////////////////////////////
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>> operator+(const C<C<T>>& a, const C<C<T2>> b) {
-        C<C<T>> result;
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && utl::is_container_of_container_of_scalar<Container2>::value,Container>::type
+    addition(Container & a, Container2 & b) {
+        Container result;
         if (a.size() == b.size()){
             result.reserve(a.size());
-            transform(a.begin(), a.end(), b.begin(),
-                      std::back_inserter(result), std::plus<C<T>>());
+            for (int i = 0; i < a.size(); ++i) {
+                result.push_back(utl::addition(a[i],b[i]));
+            }
         } else {
-            std::cout << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return result;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>> operator-(const C<C<T>>& a, const C<C<T2>> b) {
-        C<C<T>> result;
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && utl::is_container_of_container_of_scalar<Container2>::value,Container>::type
+    subtraction(Container & a, Container2 & b) {
+        Container result;
         if (a.size() == b.size()){
             result.reserve(a.size());
-            transform(a.begin(), a.end(), b.begin(),
-                      std::back_inserter(result), std::minus<C<T>>());
+            for (int i = 0; i < a.size(); ++i) {
+                result.push_back(utl::subtraction(a[i],b[i]));
+            }
         } else {
-            std::cout << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return result;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>> operator*(const C<C<T>>& a, const C<C<T2>> b) {
-        C<C<T>> result;
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && utl::is_container_of_container_of_scalar<Container2>::value,Container>::type
+    multiplication(Container & a, Container2 & b) {
+        Container result;
         if (a.size() == b.size()){
             result.reserve(a.size());
-            transform(a.begin(), a.end(), b.begin(),
-                      std::back_inserter(result), std::multiplies<C<T>>());
+            for (int i = 0; i < a.size(); ++i) {
+                result.push_back(utl::multiplication(a[i],b[i]));
+            }
         } else {
-            std::cout << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return result;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>> operator/(const C<C<T>>& a, const C<C<T2>> b) {
-        C<C<T>> result;
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && utl::is_container_of_container_of_scalar<Container2>::value,Container>::type
+    division(Container & a, Container2 & b) {
+        Container result;
         if (a.size() == b.size()){
             result.reserve(a.size());
-            transform(a.begin(), a.end(), b.begin(),
-                      std::back_inserter(result), std::divides<C<T>>());
+            for (int i = 0; i < a.size(); ++i) {
+                result.push_back(utl::division(a[i],b[i]));
+            }
         } else {
-            std::cout << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return result;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>> operator%(const C<C<T>>& a, const C<C<T2>> b) {
-        C<C<T>> result;
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && utl::is_container_of_container_of_scalar<Container2>::value,Container>::type
+    module(Container & a, Container2 & b) {
+        Container result;
         if (a.size() == b.size()){
             result.reserve(a.size());
-            transform(a.begin(), a.end(), b.begin(),
-                      std::back_inserter(result), std::modulus<C<T>>());
+            for (int i = 0; i < a.size(); ++i) {
+                result.push_back(utl::module(a[i],b[i]));
+            }
         } else {
-            std::cout << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return result;
     }
@@ -290,38 +330,43 @@ namespace utl {
     //  2-DIMENSIONAL CONTAINERS (SCALAR) //
     ////////////////////////////////////////
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>> operator+(const C<C<T>>& v, const T2 alfa) {
-        C<C<T>> result(v.begin(),v.end());
-        std::for_each(result.begin(),result.end(),[&](C<T> &x){x += alfa;});
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
+    addition(Container & a, Scalar alfa) {
+        Container result(a.begin(),a.end());
+        std::for_each(result.begin(),result.end(),[alfa](typename Container::value_type &x){utl::addition(x,alfa);});
         return result;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>> operator-(const C<C<T>>& v, const T2 alfa) {
-        C<C<T>> result(v.begin(),v.end());
-        std::for_each(result.begin(),result.end(),[&](C<T> &x){x -= alfa;});
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
+    subtraction(Container & a, Scalar alfa) {
+        Container result(a.begin(),a.end());
+        std::for_each(result.begin(),result.end(),[alfa](typename Container::value_type &x){utl::subtraction(x,alfa);});
         return result;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>> operator*(const C<C<T>>& v, const T2 alfa) {
-        C<C<T>> result(v.begin(),v.end());
-        std::for_each(result.begin(),result.end(),[&](C<T> &x){x *= alfa;});
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
+    multiplication(Container & a, Scalar alfa) {
+        Container result(a.begin(),a.end());
+        std::for_each(result.begin(),result.end(),[alfa](typename Container::value_type &x){utl::multiplication(x,alfa);});
         return result;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>> operator/(const C<C<T>>& v, const T2 alfa) {
-        C<C<T>> result(v.begin(),v.end());
-        std::for_each(result.begin(),result.end(),[&](C<T> &x){x /= alfa;});
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
+    division(Container & a, Scalar alfa) {
+        Container result(a.begin(),a.end());
+        std::for_each(result.begin(),result.end(),[alfa](typename Container::value_type &x){utl::division(x,alfa);});
         return result;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>> operator%(const C<C<T>>& v, const T2 alfa) {
-        C<C<T>> result(v.begin(),v.end());
-        std::for_each(result.begin(),result.end(),[&](C<T> &x){x %= alfa;});
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
+    module(Container & a, Scalar alfa) {
+        Container result(a.begin(),a.end());
+        std::for_each(result.begin(),result.end(),[alfa](typename Container::value_type &x){utl::module(x,alfa);});
         return result;
     }
 
@@ -329,57 +374,67 @@ namespace utl {
     //      2-D NUMERICAL ATTRIBUTION     //
     ////////////////////////////////////////
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>>& operator+=(C<C<T>>& a, const C<C<T2>> b) {
-        const auto func = [](C<T> a, C<T> b){return a + b;};
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && utl::is_container_of_container_of_scalar<Container2>::value,Container>::type&
+    addition_in_place(Container & a, Container2 & b) {
         if (a.size() == b.size()){
-            transform(a.begin(), a.end(), b.begin(), a.begin(), func);
+            for (int i = 0; i < a.size(); ++i) {
+                utl::addition_in_place(a[i],b[i]);
+            }
         } else {
-            std::cout << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return a;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>>& operator-=(C<C<T>>& a, const C<C<T2>> b) {
-        const auto func = [](C<T> a, C<T> b){return a - b;};
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && utl::is_container_of_container_of_scalar<Container2>::value,Container>::type&
+    subtraction_in_place(Container & a, Container2 & b) {
         if (a.size() == b.size()){
-            transform(a.begin(), a.end(), b.begin(), a.begin(), func);
+            for (int i = 0; i < a.size(); ++i) {
+                utl::subtraction_in_place(a[i],b[i]);
+            }
         } else {
-            std::cout << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return a;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>>& operator*=(C<C<T>>& a, const C<C<T2>> b) {
-        const auto func = [](C<T> a, C<T> b){return a * b;};
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && utl::is_container_of_container_of_scalar<Container2>::value,Container>::type&
+    multiplication_in_place(Container & a, Container2 & b) {
         if (a.size() == b.size()){
-            transform(a.begin(), a.end(), b.begin(), a.begin(), func);
+            for (int i = 0; i < a.size(); ++i) {
+                utl::multiplication_in_place(a[i],b[i]);
+            }
         } else {
-            std::cout << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return a;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>>& operator/=(C<C<T>>& a, const C<C<T2>> b) {
-        const auto func = [](C<T> a, C<T> b){return a / b;};
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && utl::is_container_of_container_of_scalar<Container2>::value,Container>::type&
+    division_in_place(Container & a, Container2 & b) {
         if (a.size() == b.size()){
-            transform(a.begin(), a.end(), b.begin(), a.begin(), func);
+            for (int i = 0; i < a.size(); ++i) {
+                utl::division_in_place(a[i],b[i]);
+            }
         } else {
-            std::cout << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return a;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>>& operator%=(C<C<T>>& a, const C<C<T2>> b) {
-        const auto func = [](C<T> a, C<T> b){return a % b;};
+    template<class Container, class Container2>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && utl::is_container_of_container_of_scalar<Container2>::value,Container>::type&
+    module_in_place(Container & a, Container2 & b) {
         if (a.size() == b.size()){
-            transform(a.begin(), a.end(), b.begin(), a.begin(), func);
+            for (int i = 0; i < a.size(); ++i) {
+                utl::module_in_place(a[i],b[i]);
+            }
         } else {
-            std::cout << "The containers should have the same size" << std::endl;
+            throw std::logic_error("The containers should have the same size");
         }
         return a;
     }
@@ -388,34 +443,39 @@ namespace utl {
     // 2-D NUMERICAL ATTRIBUTION (SCALAR) //
     ////////////////////////////////////////
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>>& operator+=(C<C<T>>& v, const T2 alfa) {
-        std::for_each(v.begin(),v.end(),[&](C<T> &x){x += alfa;});
-        return v;
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type&
+    addition_in_place(Container & a, Scalar alfa) {
+        std::for_each(a.begin(),a.end(),[alfa](typename Container::value_type &x){utl::addition_in_place(x,alfa);});
+        return a;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>>& operator-=(C<C<T>>& v, const T2 alfa) {
-        std::for_each(v.begin(),v.end(),[&](C<T> &x){x -= alfa;});
-        return v;
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type&
+    subtraction_in_place(Container & a, Scalar alfa) {
+        std::for_each(a.begin(),a.end(),[alfa](typename Container::value_type &x){utl::subtraction_in_place(x,alfa);});
+        return a;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>>& operator*=(C<C<T>>& v, const T2 alfa) {
-        std::for_each(v.begin(),v.end(),[&](C<T> &x){x *= alfa;});
-        return v;
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type&
+    multiplication_in_place(Container & a, Scalar alfa) {
+        std::for_each(a.begin(),a.end(),[alfa](typename Container::value_type &x){utl::multiplication_in_place(x,alfa);});
+        return a;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>>& operator/=(C<C<T>>& v, const T2 alfa) {
-        std::for_each(v.begin(),v.end(),[&](C<T> &x){x /= alfa;});
-        return v;
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type&
+    division_in_place(Container & a, Scalar alfa) {
+        std::for_each(a.begin(),a.end(),[alfa](typename Container::value_type &x){utl::division_in_place(x,alfa);});
+        return a;
     }
 
-    template<template<class B, class All = std::allocator<B> > class C, class T, class T2>
-    C<C<T>>& operator%=(C<C<T>>& v, const T2 alfa) {
-        std::for_each(v.begin(),v.end(),[&](C<T> &x){x %= alfa;});
-        return v;
+    template<class Container, class Scalar>
+    typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type&
+    module_in_place(Container & a, Scalar alfa) {
+        std::for_each(a.begin(),a.end(),[alfa](typename Container::value_type &x){utl::module_in_place(x,alfa);});
+        return a;
     }
 
 }

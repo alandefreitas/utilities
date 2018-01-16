@@ -517,46 +517,79 @@ int main(int argc, const char *argv[])
         }
     }
 
-    //    cout << bold << on_yellow << "Container numeric overloads" << reset << endl;
-//
-//    cout << bold << underline << "Operating on a container" << reset << endl;
-//    {
-//        vector<double> x1 = {3.4,2.5,2.6,4.6,3.5};
-//        vector<double> x2 = {2.3,3.2,1.8,3.6,2.5};
-//        vector<double> x3 = x1 + x2;
-//        vector<double> x4 = x3 + 10.0;
-//        vector<double> x5 = x4 * x2;
-//        vector<double> x6 = x5 / x1;
-//        cout << x6 << endl;
-//    }
-//
-//    cout << bold << underline << "Operating on a container with scalars" << reset << endl;
-//    {
-//        vector<double> x1 = {3.4,2.5,2.6,4.6,3.5};
-//        double x2 = 20.0;
-//        vector<double> x3 = x1 * x2;
-//        cout << x3 << endl;
-//    }
-//
-//    cout << bold << underline << "Numerical attribution" << reset << endl;
-//    {
-//        vector<double> x1 = {3.4,2.5,2.6,4.6,3.5};
-//        x1 += 20.0;
-//        vector<double> x2 = {2.3,3.2,1.8,3.6,2.5};
-//        x1 *= x2;
-//        cout << x1 << endl;
-//    }
-//
-//
-//    cout << bold << underline << "2D operations" << reset << endl;
-//    {
-//        vector<vector<double>> x1 = {{3.4,2.5,2.6,4.6,3.5},{2.3,3.2,1.8,3.6,2.5}};
-//        x1 += 20.0;
-//        vector<vector<double>> x2 = {{3.4,2.5,2.6,4.6,3.5},{2.3,3.2,1.8,3.6,2.5}};
-//        x1 += x2;
-//        x1 *= x2;
-//        cout << x1 << endl;
-//    }
+        cout << bold << on_yellow << "Container numeric overloads" << reset << endl;
+
+    cout << bold << underline << "Identifying containers with scalars" << reset << endl;
+    {
+        cout << "utl::is_container<vector<double>>::value: " << utl::is_container<vector<double>>::value << endl;
+        cout << "utl::is_container_of_container<vector<double>>::value: " << utl::is_container_of_container<vector<double>>::value << endl;
+        cout << "utl::is_container_of_non_container<vector<double>>::value: " << utl::is_container_of_non_container<vector<double>>::value << endl;
+        cout << "utl::is_container_of_scalar<vector<double>>::value: " << utl::is_container_of_scalar<vector<double>>::value << endl;
+        cout << "utl::is_container_of_container_of_scalar<vector<double>>::value: " << utl::is_container_of_container_of_scalar<vector<double>>::value << endl;
+
+        cout << "utl::is_container<vector<vector<double>>>::value: " << utl::is_container<vector<vector<double>>>::value << endl;
+        cout << "utl::is_container_of_container<vector<vector<double>>>::value: " << utl::is_container_of_container<vector<vector<double>>>::value << endl;
+        cout << "utl::is_container_of_non_container<vector<vector<double>>>::value: " << utl::is_container_of_non_container<vector<vector<double>>>::value << endl;
+        cout << "utl::is_container_of_scalar<vector<vector<double>>>::value: " << utl::is_container_of_scalar<vector<vector<double>>>::value << endl;
+        cout << "utl::is_container_of_container_of_scalar<vector<vector<double>>>::value: " << utl::is_container_of_container_of_scalar<vector<vector<double>>>::value << endl;
+
+        cout << "utl::is_container<vector<string>>::value: " << utl::is_container<vector<string>>::value << endl;
+        cout << "utl::is_container_of_container<vector<string>>::value: " << utl::is_container_of_container<vector<string>>::value << endl;
+        cout << "utl::is_container_of_non_container<vector<string>>::value: " << utl::is_container_of_non_container<vector<string>>::value << endl;
+        cout << "utl::is_container_of_scalar<vector<string>>::value: " << utl::is_container_of_scalar<vector<string>>::value << endl;
+        cout << "utl::is_container_of_container_of_scalar<vector<string>>::value: " << utl::is_container_of_container_of_scalar<vector<string>>::value << endl;
+
+        cout << "utl::is_container<vector<vector<string>>>::value: " << utl::is_container<vector<vector<string>>>::value << endl;
+        cout << "utl::is_container_of_container<vector<vector<string>>>::value: " << utl::is_container_of_container<vector<vector<string>>>::value << endl;
+        cout << "utl::is_container_of_non_container<vector<vector<string>>>::value: " << utl::is_container_of_non_container<vector<vector<string>>>::value << endl;
+        cout << "utl::is_container_of_scalar<vector<vector<string>>>::value: " << utl::is_container_of_scalar<vector<vector<string>>>::value << endl;
+        cout << "utl::is_container_of_container_of_scalar<vector<vector<string>>>::value: " << utl::is_container_of_container_of_scalar<vector<vector<string>>>::value << endl;
+
+    }
+
+    cout << bold << underline << "Operating on a containers" << reset << endl;
+    {
+        vector<double> x1 = {3.4,2.5,2.6,4.6,3.5};
+        vector<double> x2 = {2.3,3.2,1.8,3.6,2.5};
+        vector<double> x3 = addition(x1,x2);
+        cout << x3 << endl;
+        vector<double> x4 = addition(x3,10.0);
+        cout << x4 << endl;
+        vector<double> x5 = multiplication(x4,x2);
+        cout << x5 << endl;
+        vector<double> x6 = division(x5,x1);
+        cout << x6 << endl;
+        division_in_place(x6,3);
+        cout << x6 << endl;
+        addition_in_place(x6,x2);
+        cout << x6 << endl;
+    }
+
+    cout << bold << underline << "Multidimensional operations" << reset << endl;
+    {
+        vector<vector<double>> x1 = {{3.4,2.5,2.6,4.6,3.5},{2.3,3.2,1.8,3.6,2.5}};
+        cout << x1 << endl;
+        addition_in_place(x1,20.0);
+        cout << x1 << endl;
+        vector<vector<double>> x2 = {{3.4,2.5,2.6,4.6,3.5},{2.3,3.2,1.8,3.6,2.5}};
+        addition_in_place(x1,x2);
+        cout << x1 << endl;
+        vector<vector<double>> x3 = addition(x1,x2);
+        cout << x3 << endl;
+        multiplication_in_place(x1,x2);
+        cout << x1 << endl;
+        vector<vector<vector<double>>> x4 = {{{3.4,2.5,2.6,4.6,3.5},{2.3,3.2,1.8,3.6,2.5}},{{3.4,2.5,2.6,4.6,3.5},{2.3,3.2,1.8,3.6,2.5}}};
+        cout << x4 << endl;
+        addition_in_place(x4,20.0);
+        cout << x4 << endl;
+        vector<vector<vector<double>>> x5 = {{{3.4,2.5,2.6,4.6,3.5},{2.3,3.2,1.8,3.6,2.5}},{{3.4,2.5,2.6,4.6,3.5},{2.3,3.2,1.8,3.6,2.5}}};
+        addition_in_place(x4,x5);
+        cout << x4 << endl;
+        vector<vector<vector<double>>> x6 = addition(x4,x5);
+        cout << x6 << endl;
+        multiplication_in_place(x4,x5);
+        cout << x4 << endl;
+    }
 
     return 0;
 }

@@ -5,6 +5,7 @@
 #include <tuple>
 #include <functional>
 #include <type_traits>
+#include "prettyprint.hpp"
 
 namespace utl {
 
@@ -239,6 +240,69 @@ namespace utl {
     typename std::add_rvalue_reference<T>::type rt_val() noexcept {
         return std::move(*static_cast<T *>(nullptr));
     }
+
+    template<class T>
+    struct Void {
+        typedef void type;
+    };
+
+    template<class T, class U = void>
+    struct has_value_type {
+        enum { value = 0 };
+    };
+
+    template<class T>
+    struct has_value_type<T, typename Void<typename T::value_type>::type > {
+        enum { value = 1 };
+    };
+
+    template<typename T>
+    struct is_container : public pretty_print::is_container<T> {};
+
+    template<class T, class U = void>
+    struct has_container_value_type {
+        enum { value = 0 };
+    };
+
+    template<class T>
+    struct has_container_value_type<T, typename Void<typename T::value_type>::type > {
+        enum { value = utl::is_container<typename T::value_type>::value };
+    };
+
+    template<typename T>
+    struct is_container_of_container : std::integral_constant<bool, utl::is_container<T>::value && utl::has_container_value_type<T>::value> {};
+
+    template<typename T>
+    struct is_container_of_non_container : std::integral_constant<bool, utl::is_container<T>::value && !utl::is_container_of_container<T>::value> {};
+
+    template<class T, class U = void>
+    struct has_scalar_value_type {
+        enum { value = 0 };
+    };
+
+    template<class T>
+    struct has_scalar_value_type<T, typename Void<typename T::value_type>::type > {
+        enum { value = std::is_scalar<typename T::value_type>::value };
+    };
+
+    template<typename T>
+    struct is_container_of_scalar : std::integral_constant<bool, utl::is_container<T>::value && utl::has_scalar_value_type<T>::value> {};
+
+    template<typename T>
+    struct is_container_of_container_of_scalar; // recursive forward declaration
+
+    template<class T, class U = void>
+    struct has_scalar_container_value_type {
+        enum { value = 0 };
+    };
+
+    template<class T>
+    struct has_scalar_container_value_type<T, typename Void<typename T::value_type>::type > {
+        enum { value = utl::is_container_of_scalar<typename T::value_type>::value || utl::is_container_of_container_of_scalar<typename T::value_type>::value };
+    };
+
+    template<typename T>
+    struct is_container_of_container_of_scalar : std::integral_constant<bool, utl::is_container<T>::value && utl::has_scalar_container_value_type<T>::value> {};
 
 }
 

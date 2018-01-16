@@ -67,6 +67,7 @@ This library includes many useful utilities for C++.
     * Serialization
     * Universally Unique Identifiers
     * Program Options
+    * Mathematical Operators (+,-,*,/,%) for containers of scalars
 * Parallel Programming [(examples)](./examples/parallel_utils.cpp)
     * Thread Pools
     * GPU / OpenCL

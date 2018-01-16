@@ -24,11 +24,13 @@
 #include <boost/program_options.hpp>
 
 // INTERNAL
-// stl overloads (to be replaced by a wrapper that inherits container and adds numeric functions)
-//#include "container_overloads.h"
-// container functions
+// plus, minus, etc for containers with numeric/scalar values
+#include "container_overloads.h"
+// functions with same format as matlab
 #include "matlab_utils.h"
+// (numeric) functions with same format as php
 #include "php_utils.h"
+// functions with same format as laravel
 #include "laravel_utils.h"
 
 namespace utl {
