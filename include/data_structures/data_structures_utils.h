@@ -5,7 +5,7 @@
 #ifndef UTILITIES_DATA_STRUCTURES_UTILS_H
 #define UTILITIES_DATA_STRUCTURES_UTILS_H
 
-#include <src/json.hpp>
+#include <json.hpp>
 #include <boost/any.hpp>
 #include <boost/optional.hpp>
 #include <boost/optional/optional_io.hpp>

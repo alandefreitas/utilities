@@ -24,7 +24,6 @@ endif()
 
 set(Utils_INCLUDE_DIRS
     ${Boost_INCLUDE_DIR}
-#    SYSTEM
     ${OpenCL_INCLUDE_DIRS}
     ${ThreadPool_INCLUDE_DIRS}
     ${JSON_INCLUDE_DIRS}
@@ -35,6 +34,10 @@ set(Utils_INCLUDE_DIRS
     ${TypeString_INCLUDE_DIRS}
     ${CMAKE_CURRENT_LIST_DIR}/include
     )
+
+if (APPLE)
+    set(Utils_INCLUDE_DIRS ${Utils_INCLUDE_DIRS} SYSTEM)
+endif()
 
 set(Utils_LIBRARIES
     ${LINUX_LIBS}
