@@ -110,8 +110,7 @@ namespace utl {
 
     template<class Container, class Scalar>
     typename std::enable_if<utl::is_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
-    subtraction(typename std::enable_if<utl::is_container_of_scalar<Container>::value,Container>::type & a,
-                   typename std::enable_if<std::is_scalar<Scalar>::value,Scalar>::type alfa) {
+    subtraction(Container & a, Scalar alfa) {
         Container result(a.begin(), a.end());
         std::for_each(result.begin(), result.end(), [&](typename Container::value_type &x) { x -= (typename Container::value_type) alfa; });
         return result;
@@ -119,8 +118,7 @@ namespace utl {
 
     template<class Container, class Scalar>
     typename std::enable_if<utl::is_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
-    multiplication(typename std::enable_if<utl::is_container_of_scalar<Container>::value,Container>::type & a,
-                         typename std::enable_if<std::is_scalar<Scalar>::value,Scalar>::type alfa) {
+    multiplication(Container & a, Scalar alfa) {
         Container result(a.begin(), a.end());
         std::for_each(result.begin(), result.end(), [&](typename Container::value_type &x) { x *= (typename Container::value_type) alfa; });
         return result;
@@ -128,8 +126,7 @@ namespace utl {
 
     template<class Container, class Scalar>
     typename std::enable_if<utl::is_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
-    division(typename std::enable_if<utl::is_container_of_scalar<Container>::value,Container>::type & a,
-                      typename std::enable_if<std::is_scalar<Scalar>::value,Scalar>::type alfa) {
+    division(Container & a, Scalar alfa) {
         Container result(a.begin(), a.end());
         std::for_each(result.begin(), result.end(), [&](typename Container::value_type &x) { x /= (typename Container::value_type) alfa; });
         return result;
@@ -137,8 +134,7 @@ namespace utl {
 
     template<class Container, class Scalar>
     typename std::enable_if<utl::is_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
-    module(typename std::enable_if<utl::is_container_of_scalar<Container>::value,Container>::type & a,
-                      typename std::enable_if<std::is_scalar<Scalar>::value,Scalar>::type alfa) {
+    module(Container & a, Scalar alfa) {
         Container result(a.begin(),a.end());
         std::for_each(result.begin(),result.end(),[&](typename Container::value_type &x){x %= (typename Container::value_type) alfa;});
         return result;
@@ -334,7 +330,7 @@ namespace utl {
     typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
     addition(Container & a, Scalar alfa) {
         Container result(a.begin(),a.end());
-        std::for_each(result.begin(),result.end(),[alfa](typename Container::value_type &x){utl::addition(x,alfa);});
+        std::for_each(result.begin(),result.end(),[alfa](typename Container::value_type &x){utl::addition_in_place(x,alfa);});
         return result;
     }
 
@@ -342,7 +338,7 @@ namespace utl {
     typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
     subtraction(Container & a, Scalar alfa) {
         Container result(a.begin(),a.end());
-        std::for_each(result.begin(),result.end(),[alfa](typename Container::value_type &x){utl::subtraction(x,alfa);});
+        std::for_each(result.begin(),result.end(),[alfa](typename Container::value_type &x){utl::subtraction_in_place(x,alfa);});
         return result;
     }
 
@@ -350,7 +346,7 @@ namespace utl {
     typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
     multiplication(Container & a, Scalar alfa) {
         Container result(a.begin(),a.end());
-        std::for_each(result.begin(),result.end(),[alfa](typename Container::value_type &x){utl::multiplication(x,alfa);});
+        std::for_each(result.begin(),result.end(),[alfa](typename Container::value_type &x){utl::multiplication_in_place(x,alfa);});
         return result;
     }
 
@@ -358,7 +354,7 @@ namespace utl {
     typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
     division(Container & a, Scalar alfa) {
         Container result(a.begin(),a.end());
-        std::for_each(result.begin(),result.end(),[alfa](typename Container::value_type &x){utl::division(x,alfa);});
+        std::for_each(result.begin(),result.end(),[alfa](typename Container::value_type &x){utl::division_in_place(x,alfa);});
         return result;
     }
 
@@ -366,7 +362,7 @@ namespace utl {
     typename std::enable_if<utl::is_container_of_container_of_scalar<Container>::value && std::is_scalar<Scalar>::value,Container>::type
     module(Container & a, Scalar alfa) {
         Container result(a.begin(),a.end());
-        std::for_each(result.begin(),result.end(),[alfa](typename Container::value_type &x){utl::module(x,alfa);});
+        std::for_each(result.begin(),result.end(),[alfa](typename Container::value_type &x){utl::module_in_place(x,alfa);});
         return result;
     }
 

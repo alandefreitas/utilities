@@ -9,6 +9,8 @@
 
 #include <math.h>
 
+#include "../paradigms/traits.hpp"
+
 namespace utl {
 
     template <class Container>
@@ -52,8 +54,8 @@ namespace utl {
         return utl::rank(v);
     }
 
-        template <class Container>
-    double mean(const Container &v){
+    template <class Container>
+    double mean(const Container &v) {
         return accumulate(v.begin(),v.end(),0.0)/v.size();
     }
 
