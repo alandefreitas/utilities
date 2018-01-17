@@ -1,8 +1,3 @@
----
-title: Utilities for Modern C++
----
-
-
 # Utilities for Modern C++
 
 This library includes many useful utilities for C++.
