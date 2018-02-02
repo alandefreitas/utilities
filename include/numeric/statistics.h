@@ -8,10 +8,39 @@
 #include <vector>
 
 #include <math.h>
+#include <cmath>
+#include <algorithm>
+#include <iterator>
+
+#include <boost/math/constants/constants.hpp>
+#include <boost/math/distributions.hpp>
 
 #include "../paradigms/traits.hpp"
 
 namespace utl {
+    /*
+     * Descriptive statistics
+     */
+    template <typename iterator>
+    double mean(typename std::enable_if<utl::is_iterator<iterator>::value,iterator>::type begin, iterator end){
+        return std::accumulate(begin,end,0.0)/std::distance(begin,end);
+    }
+
+    template <typename range>
+    double mean(typename std::enable_if<utl::is_container<range>::value,range>::type r){
+        return mean(std::begin(r),std::end(r));
+    }
+
+    template <typename iterator>
+    double std_dev(typename std::enable_if<utl::is_iterator<iterator>::value,iterator>::type begin, iterator end){
+        auto m = mean(begin,end);
+        return sqrt(std::accumulate(begin,end,0.0,[m](auto x, auto y){return x+std::pow(y-m,2);})/(std::distance(begin,end)-1));
+    }
+
+    template <typename range>
+    double std_dev(range r){
+        return std_dev(std::begin(r),std::end(r));
+    }
 
     template <class Container>
     std::vector<size_t> sorted_origin(const Container &v){
@@ -54,86 +83,327 @@ namespace utl {
         return utl::rank(v);
     }
 
-    template <class Container>
-    double mean(const Container &v) {
-        return accumulate(v.begin(),v.end(),0.0)/v.size();
+    /*
+         * PDFS
+         */
+
+    double arcsine_pdf(double x, double x_min = 0.0, double x_max = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::arcsine_distribution<double>(x_min,x_max),(x-mu)/sigma);
     }
 
-    template <class Container>
-    double var(const Container &v, double pre_processed_mean){
-        return accumulate(v.begin(),v.end(),0.0,[&pre_processed_mean](auto &x, auto &y){return x + pow(y-pre_processed_mean,2);})/(v.size()-1);
+    double bernoulli_pdf(double x, double p = 0.5, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::bernoulli_distribution<double>(p),(x-mu)/sigma);
     }
 
-    template <class Container>
-    double var(const Container &v){
-        const double mean = accumulate(v.begin(),v.end(),0.0)/v.size();
-        return var(v,mean);
+    double beta_pdf(double x, double l_alpha = 1.0, double l_beta = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::beta_distribution<double>(l_alpha, l_beta),(x-mu)/sigma);
     }
 
-    template <class Container>
-    double stdev(const Container &v, double pre_processed_variance) {
-        return sqrt(pre_processed_variance);
+    double binomial_pdf(double x, double n = 1.0, double p = 0.5, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::binomial_distribution<double>(n,p),(x-mu)/sigma);
     }
 
-    template <class Container>
-    double stdev(const Container &v) {
-        return stdev(v, var(v));
+    double cauchy_pdf(double x, double l_location = 0.0, double l_scale = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::cauchy_distribution<double>(l_location,l_scale),(x-mu)/sigma);
     }
 
-    template <class Container>
-    double ttest(const Container &v, double population_mean, double pre_processed_mean) {
-        const double X = pre_processed_mean;
-        const double s = stdev(v, var(v, X));
-        const double n = v.size();
-        return (X-population_mean)/(s/sqrt(n));
+    double chi_squared_pdf(double x, double i, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::chi_squared_distribution<double>(i),(x-mu)/sigma);
     }
 
-    template <class Container>
-    double ttest(const Container &v, double population_mean = 0) {
-        const double X = mean(v);
-        return ttest(v,population_mean,X);
+    double exponential_pdf(double x, double l_lambda = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::exponential_distribution<double>(l_lambda),(x-mu)/sigma);
     }
 
-    template <class Container>
-    double ttest(const Container &v, const Container &v2, double population_mean = 0) {
-        Container v3 = v;
-        for (int i = 0; i < v2.size(); ++i) {
-            v3[i] -= v2[i];
+    double extreme_value_pdf(double x, double a = 0, double b = 1, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::extreme_value_distribution<double>(a,b),(x-mu)/sigma);
+    }
+
+    double fisher_f_pdf(double x, double i, double j, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::fisher_f_distribution<double>(i,j),(x-mu)/sigma);
+    }
+
+    double gamma_pdf(double x, double l_shape, double l_scale = 1, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::gamma_distribution<double>(l_shape,l_scale),(x-mu)/sigma);
+    }
+
+    double geometric_pdf(double x, double p, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::geometric_distribution<double>(p),(x-mu)/sigma);
+    }
+
+    template <typename T>
+    double hyperexponential_pdf(double x, T range, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::hyperexponential_distribution<double>(range),(x-mu)/sigma);
+    }
+
+    double hypergeometric_pdf(double x, unsigned int r, unsigned int n, unsigned int N, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::hypergeometric_distribution<double>(r,n,N),(x-mu)/sigma);
+    }
+
+    double inverse_chi_squared_pdf(double x, double df = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::inverse_chi_squared_distribution<double>(df),(x-mu)/sigma);
+    }
+
+    double inverse_gamma_pdf(double x, double l_shape = 1.0,double l_scale = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::inverse_gamma_distribution<double>(l_shape,l_scale),(x-mu)/sigma);
+    }
+
+    double inverse_gaussian_pdf(double x, double l_mean = 1.0, double l_scale = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::inverse_gaussian_distribution<double>(l_mean,l_scale),(x-mu)/sigma);
+    }
+
+    double laplace_pdf(double x, double l_location = 0.0, double l_scale = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::laplace_distribution<double>(l_location,l_scale),(x-mu)/sigma);
+    }
+
+    double logistic_pdf(double x, double l_location = 0.0,double l_scale = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::logistic_distribution<double>(l_location,l_scale),(x-mu)/sigma);
+    }
+
+    double lognormal_pdf(double x, double l_location = 0.0,double l_scale = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::lognormal_distribution<double>(l_location,l_scale),(x-mu)/sigma);
+    }
+
+    double negative_binomial_pdf(double x, double r, double p, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::negative_binomial_distribution<double>(r,p),(x-mu)/sigma);
+    }
+
+    double non_central_chi_squared_pdf(double x, double df, double lambda, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::non_central_chi_squared_distribution<double>(df,lambda),(x-mu)/sigma);
+    }
+
+    double non_central_beta_pdf(double x, double a, double b, double lambda, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::non_central_beta_distribution<double>(a,b,lambda),(x-mu)/sigma);
+    }
+
+    double non_central_f_pdf(double x, double v1, double v2, double lambda, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::non_central_f_distribution<double>(v1,v2,lambda),(x-mu)/sigma);
+    }
+
+    double non_central_t_pdf(double x, double v, double lambda, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::non_central_t_distribution<double>(v,lambda),(x-mu)/sigma);
+    }
+
+    double normal_pdf(double x, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::normal_distribution<double>(),(x-mu)/sigma);
+    }
+
+    double pareto_pdf(double x, double l_scale = 1.0,double l_shape = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::pareto_distribution<double>(l_scale,l_shape),(x-mu)/sigma);
+    }
+
+    double poisson_pdf(double x, double l_mean =1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::poisson_distribution<double>(l_mean),(x-mu)/sigma);
+    }
+
+    double rayleigh_pdf(double x, double l_sigma = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::rayleigh_distribution<double>(l_sigma),(x-mu)/sigma);
+    }
+
+    double skew_normal_pdf(double x, double l_location = 0.0, double l_scale = 1.0, double l_shape = 0.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::skew_normal_distribution<double>(l_location,l_scale,l_shape),(x-mu)/sigma);
+    }
+
+    double students_t_pdf(double x, double df, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::students_t_distribution<double>(df),(x-mu)/sigma);
+    }
+
+    double triangular_pdf(double x, double l_lower = -1.0, double l_mode = 0.0, double l_upper = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::triangular_distribution<double>(l_lower,l_mode,l_upper),(x-mu)/sigma);
+    }
+
+    double uniform_pdf(double x, double l_lower = 0.0,double l_upper = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::uniform_distribution<double>(l_lower,l_upper),(x-mu)/sigma);
+    }
+
+    double weibull_pdf(double x, double l_shape, double l_scale = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::pdf(boost::math::weibull_distribution<double>(l_shape,l_scale),(x-mu)/sigma);
+    }
+
+    /*
+     * CDFS
+     */
+
+    double arcsine_cdf(double x, double x_min = 0.0, double x_max = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::arcsine_distribution<double>(x_min,x_max),(x-mu)/sigma);
+    }
+
+    double bernoulli_cdf(double x, double p = 0.5, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::bernoulli_distribution<double>(p),(x-mu)/sigma);
+    }
+
+    double beta_cdf(double x, double l_alpha = 1.0, double l_beta = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::beta_distribution<double>(l_alpha, l_beta),(x-mu)/sigma);
+    }
+
+    double binomial_cdf(double x, double n = 1.0, double p = 0.5, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::binomial_distribution<double>(n,p),(x-mu)/sigma);
+    }
+
+    double cauchy_cdf(double x, double l_location = 0.0, double l_scale = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::cauchy_distribution<double>(l_location,l_scale),(x-mu)/sigma);
+    }
+
+    double chi_squared_cdf(double x, double i, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::chi_squared_distribution<double>(i),(x-mu)/sigma);
+    }
+
+    double exponential_cdf(double x, double l_lambda = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::exponential_distribution<double>(l_lambda),(x-mu)/sigma);
+    }
+
+    double extreme_value_cdf(double x, double a = 0, double b = 1, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::extreme_value_distribution<double>(a,b),(x-mu)/sigma);
+    }
+
+    double fisher_f_cdf(double x, double i, double j, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::fisher_f_distribution<double>(i,j),(x-mu)/sigma);
+    }
+
+    double gamma_cdf(double x, double l_shape, double l_scale = 1, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::gamma_distribution<double>(l_shape,l_scale),(x-mu)/sigma);
+    }
+
+    double geometric_cdf(double x, double p, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::geometric_distribution<double>(p),(x-mu)/sigma);
+    }
+
+    template <typename T>
+    double hyperexponential_cdf(double x, T range, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::hyperexponential_distribution<double>(range),(x-mu)/sigma);
+    }
+
+    double hypergeometric_cdf(double x, unsigned int r, unsigned int n, unsigned int N, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::hypergeometric_distribution<double>(r,n,N),(x-mu)/sigma);
+    }
+
+    double inverse_chi_squared_cdf(double x, double df = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::inverse_chi_squared_distribution<double>(df),(x-mu)/sigma);
+    }
+
+    double inverse_gamma_cdf(double x, double l_shape = 1.0,double l_scale = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::inverse_gamma_distribution<double>(l_shape,l_scale),(x-mu)/sigma);
+    }
+
+    double inverse_gaussian_cdf(double x, double l_mean = 1.0, double l_scale = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::inverse_gaussian_distribution<double>(l_mean,l_scale),(x-mu)/sigma);
+    }
+
+    double laplace_cdf(double x, double l_location = 0.0, double l_scale = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::laplace_distribution<double>(l_location,l_scale),(x-mu)/sigma);
+    }
+
+    double logistic_cdf(double x, double l_location = 0.0,double l_scale = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::logistic_distribution<double>(l_location,l_scale),(x-mu)/sigma);
+    }
+
+    double lognormal_cdf(double x, double l_location = 0.0,double l_scale = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::lognormal_distribution<double>(l_location,l_scale),(x-mu)/sigma);
+    }
+
+    double negative_binomial_cdf(double x, double r, double p, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::negative_binomial_distribution<double>(r,p),(x-mu)/sigma);
+    }
+
+    double non_central_chi_squared_cdf(double x, double df, double lambda, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::non_central_chi_squared_distribution<double>(df,lambda),(x-mu)/sigma);
+    }
+
+    double non_central_beta_cdf(double x, double a, double b, double lambda, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::non_central_beta_distribution<double>(a,b,lambda),(x-mu)/sigma);
+    }
+
+    double non_central_f_cdf(double x, double v1, double v2, double lambda, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::non_central_f_distribution<double>(v1,v2,lambda),(x-mu)/sigma);
+    }
+
+    double non_central_t_cdf(double x, double v, double lambda, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::non_central_t_distribution<double>(v,lambda),(x-mu)/sigma);
+    }
+
+    double normal_cdf(double x, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::normal_distribution<double>(),(x-mu)/sigma);
+    }
+
+    double pareto_cdf(double x, double l_scale = 1.0,double l_shape = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::pareto_distribution<double>(l_scale,l_shape),(x-mu)/sigma);
+    }
+
+    double poisson_cdf(double x, double l_mean =1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::poisson_distribution<double>(l_mean),(x-mu)/sigma);
+    }
+
+    double rayleigh_cdf(double x, double l_sigma = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::rayleigh_distribution<double>(l_sigma),(x-mu)/sigma);
+    }
+
+    double skew_normal_cdf(double x, double l_location = 0.0, double l_scale = 1.0, double l_shape = 0.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::skew_normal_distribution<double>(l_location,l_scale,l_shape),(x-mu)/sigma);
+    }
+
+    double students_t_cdf(double x, double df, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::students_t_distribution<double>(df),(x-mu)/sigma);
+    }
+
+    double triangular_cdf(double x, double l_lower = -1.0, double l_mode = 0.0, double l_upper = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::triangular_distribution<double>(l_lower,l_mode,l_upper),(x-mu)/sigma);
+    }
+
+    double uniform_cdf(double x, double l_lower = 0.0,double l_upper = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::uniform_distribution<double>(l_lower,l_upper),(x-mu)/sigma);
+    }
+
+    double weibull_cdf(double x, double l_shape, double l_scale = 1.0, double mu = 0.0, double sigma = 1.0){
+        return boost::math::cdf(boost::math::weibull_distribution<double>(l_shape,l_scale),(x-mu)/sigma);
+    }
+
+    /*
+     * Confidence limits
+     */
+
+    double students_t_confidence_limits(double _mean, double _std_dev, long _sample_size, double alpha = 0.05, double mu = 0.0, double sigma = 1.0){
+        boost::math::students_t_distribution<double> dist(_sample_size - 1);
+        double T = boost::math::quantile(boost::math::complement(dist, alpha / 2));
+        return T * _std_dev / sqrt(double(_sample_size));
+    }
+
+    /*
+     * Hypothesis tests
+     */
+
+    // One-sample t-test
+    template <typename iterator>
+    double students_t_test(typename std::enable_if<utl::is_iterator<iterator>::value,iterator>::type begin, iterator end, double true_mean = 0.0){
+        auto n = std::distance(begin,end);
+        auto t = utl::mean(begin,end)-true_mean/(std_dev(begin,end)/sqrt(n));
+        return students_t_pdf(t,n-1);
+    }
+
+    template <typename range>
+    double students_t_test(range r){
+        return students_t_test(std::begin(r),std::end(r),0.0);
+    }
+
+    // Independent two-sample t-test
+    template <typename iterator>
+    double students_t_test(typename std::enable_if<utl::is_iterator<iterator>::value,iterator>::type begin1, iterator end1, iterator begin2, iterator end2, bool assume_equal_variance = false){
+        auto n1 = std::distance(begin1,end1);
+        auto n2 = std::distance(begin2,end2);
+        if (assume_equal_variance) {
+            auto sp = sqrt(((n1 - 1) * std::pow(std_dev(begin1,end1),2.0)+ (n2 - 1) * std::pow(std_dev(begin2,end2),2.0))/(n1+n2-2));
+            auto t = utl::mean(begin1,end1) - utl::mean(begin2,end2)/(sp*sqrt(1.0/n1 + 1.0/n2));
+            return students_t_pdf(t,n1+n2-2);
+        } else {
+            // Welch's t-test
+            auto s_delta = sqrt(std::pow(std_dev(begin1,end1),2.0)/n1 + std::pow(std_dev(begin2,end2),2.0)/n2);
+            auto t = utl::mean(begin1,end1) - utl::mean(begin2,end2) / (s_delta);
+            return students_t_pdf(t,n1+n2-2);
         }
-        const double X = mean(v3);
-        return ttest(v3,population_mean,X);
     }
 
-    // equal or unequal sample sizes / same variance
-    template <class Container>
-    double ttest2(const Container &v1, const Container &v2) {
-        const double X = mean(v1);
-        const double Y = mean(v2);
-        const double sX = stdev(v1, var(v1, X));
-        const double sY = stdev(v2, var(v2, Y));
-        const double n = v1.size();
-        const double m = v2.size();
-        const double sP = sqrt(((n-1)*(std::pow(sX,2))+(m-1)*(std::pow(sY,2)))/(n+m-2));
-        return (X-Y)/(sP*sqrt(1/n+1/m));
-    }
-
-    // insensitive to equality of the variances regardless of whether the sample sizes are similar
-    // https://en.wikipedia.org/wiki/Welch%27s_t-test
-    template <class Container>
-    double ttest2_welchs(const Container &v1, const Container &v2) {
-        const double X = mean(v1);
-        const double Y = mean(v2);
-        const double sX = stdev(v1, var(v1, X));
-        const double sY = stdev(v2, var(v2, Y));
-        const double n = v1.size();
-        const double m = v2.size();
-        const double s_delta = sqrt(std::pow(sX,2)/n+std::pow(sY,2)/m);
-        return (X-Y)/(s_delta);
-    }
-
-    template <class Container>
-    double ttest2_paired(const Container &v1, const Container &v2, double population_mean = 0.0) {
-        return ttest(v1,v2,population_mean);
+    template <typename range>
+    double students_t_test(range r1, range r2, bool assume_equal_variance = false){
+        return students_t_test(std::begin(r1),std::end(r1),std::begin(r2),std::end(r2), assume_equal_variance);
     }
 
 }

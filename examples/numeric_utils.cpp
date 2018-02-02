@@ -11,6 +11,8 @@
 using namespace std;
 using namespace utl;
 
+#define SHOW(a) std::cout << #a << ": " << (a) << std::endl
+
 namespace boost {
     namespace geometry {
         namespace index {
@@ -45,84 +47,84 @@ int main() {
          << reset << endl;
     {
         cout << bold << underline << "Floating Point" << reset << endl;
-        cout << "rand(): " << rand<double>() << endl;
-        cout << "rand(): " << rand<double>() << endl;
-        cout << "rand(): " << rand<int>() << endl;
-        cout << "rand(): " << rand<int>() << endl;
-        cout << "rand(): " << rand() << " (don't use it: ambiguous)" << endl;
-        cout << "rand<double>(): " << rand < double > () << endl;
-        cout << "rand<double>(): " << rand < double > () << endl;
-        cout << "rand(5.0,15.0): " << rand(5.0, 15.0) << endl;
-        cout << "rand(5.0,15.0): " << rand(5.0, 15.0) << endl;
-        cout << "rand<double>(5.0,15.0): " << rand < double > (5.0, 15.0) << endl;
-        cout << "rand<double>(5.0,15.0): " << rand < double > (5.0, 15.0) << endl;
+        SHOW(rand<double>());
+        SHOW(rand<double>());
+        SHOW(rand<int>());
+        SHOW(rand<int>());
+        SHOW(rand());
+        SHOW(rand < double > ());
+        SHOW(rand < double > ());
+        SHOW(rand(5.0, 15.0));
+        SHOW(rand(5.0, 15.0));
+        SHOW(rand < double > (5.0, 15.0));
+        SHOW(rand < double > (5.0, 15.0));
         cout << bold << underline << "Integer" << reset << endl;
-        cout << "rand<int>(): " << rand < int > () << endl;
-        cout << "rand<int>(): " << rand < int > () << endl;
-        cout << "rand<int>(): " << rand < int > () << endl;
-        cout << "rand<int>(): " << rand < int > () << endl;
-        cout << "randi(3,15): " << randi(3, 15) << endl;
-        cout << "randi(3,15): " << randi(3, 15) << endl;
-        cout << "randi(3,15): " << randi(3, 15) << endl;
-        cout << "randi(3,15): " << randi(3, 15) << endl;
-        cout << "randi(10,3,15): " << randi(10, 3, 15) << endl;
-        cout << "randi(10,3,15): " << randi(10, 3, 15) << endl;
-        cout << "randi(10,3,15): " << randi(10, 3, 15) << endl;
-        cout << "randi(10,3,15): " << randi(10, 3, 15) << endl;
+        SHOW(rand < int > ());
+        SHOW(rand < int > ());
+        SHOW(rand < int > ());
+        SHOW(rand < int > ());
+        SHOW(randi(3, 15));
+        SHOW(randi(3, 15));
+        SHOW(randi(3, 15));
+        SHOW(randi(3, 15));
+        SHOW(randi(10, 3, 15));
+        SHOW(randi(10, 3, 15));
+        SHOW(randi(10, 3, 15));
+        SHOW(randi(10, 3, 15));
     }
 
     cout << on_yellow << bold << underline << "Related to Normal distribution"
          << reset << endl;
     {
         cout << bold << underline << "Normal Distribution" << reset << endl;
-        cout << "randn(): " << randn() << endl;
-        cout << "randn(): " << randn() << endl;
-        cout << "randn(4.3,2.5): " << randn(4.3, 2.5) << endl;
-        cout << "randn(4.3,2.5): " << randn(4.3, 2.5) << endl;
-        cout << "randn(10,4.3,2.5): " << randn(10, 4.3, 2.5) << endl;
-        cout << "randn(10,4.3,2.5): " << randn(10, 4.3, 2.5) << endl;
-        cout << "randn(4,4,4.3,2.5): " << randn(4, 4, 4.3, 2.5) << endl;
-        cout << "randn(4,4,4.3,2.5): " << randn(4, 4, 4.3, 2.5) << endl;
-        cout << "randn<double>(4,2): " << randn<double>(4, 2) << endl;
-        cout << "randn<double>(4,2): " << randn<double>(4, 2) << endl;
-        cout << "randn(4,2): " << randn(4, 2) << endl;
-        cout << "randn(4,2): " << randn(4, 2) << endl;
-        cout << "randn<int>(4,2): " << randn<int>(4, 2) << endl;
-        cout << "randn<int>(4,2): " << randn<int>(4, 2) << endl;
-        cout << "normal(3.0,10.0): " << normal(3.0, 10.0) << endl;
-        cout << "normal(3.0,10.0): " << normal(3.0, 10.0) << endl;
-        cout << "normal(3,10): " << normal(3, 10) << endl;
-        cout << "normal(3,10): " << normal(3, 10) << endl;
+        SHOW(randn());
+        SHOW(randn());
+        SHOW(randn(4.3, 2.5));
+        SHOW(randn(4.3, 2.5));
+        SHOW(randn(10, 4.3, 2.5));
+        SHOW(randn(10, 4.3, 2.5));
+        SHOW(randn(4, 4, 4.3, 2.5));
+        SHOW(randn(4, 4, 4.3, 2.5));
+        SHOW(randn<double>(4, 2));
+        SHOW(randn<double>(4, 2));
+        SHOW(randn(4, 2));
+        SHOW(randn(4, 2));
+        SHOW(randn<int>(4, 2));
+        SHOW(randn<int>(4, 2));
+        SHOW(normal(3.0, 10.0));
+        SHOW(normal(3.0, 10.0));
+        SHOW(normal(3, 10));
+        SHOW(normal(3, 10));
 
         cout << bold << underline << "Lognormal distribution" << reset << endl;
-        cout << "lognormal(3.0,10.0): " << lognormal(3.0, 10.0) << endl;
-        cout << "lognormal(3.0,10.0): " << lognormal(3.0, 10.0) << endl;
-        cout << "lognormal(3,10): " << lognormal(3, 10) << endl;
-        cout << "lognormal(3,10): " << lognormal(3, 10) << endl;
+        SHOW(lognormal(3.0, 10.0));
+        SHOW(lognormal(3.0, 10.0));
+        SHOW(lognormal(3, 10));
+        SHOW(lognormal(3, 10));
 
         cout << bold << underline << "Chi-squared distribution" << reset << endl;
-        cout << "chi_squared(10.0): " << chi_squared(10.0) << endl;
-        cout << "chi_squared(10.0): " << chi_squared(10.0) << endl;
-        cout << "chi_squared(10): " << chi_squared(10) << endl;
-        cout << "chi_squared(10): " << chi_squared(10) << endl;
+        SHOW(chi_squared(10.0));
+        SHOW(chi_squared(10.0));
+        SHOW(chi_squared(10));
+        SHOW(chi_squared(10));
 
         cout << bold << underline << "Cauchy distribution" << reset << endl;
-        cout << "cauchy(1.0,1): " << cauchy(1.0, 1.) << endl;
-        cout << "cauchy(1.0,1): " << cauchy(1.0, 1.) << endl;
-        cout << "cauchy(1,1): " << cauchy(1, 1) << endl;
-        cout << "cauchy(1,1): " << cauchy(1, 1) << endl;
+        SHOW(cauchy(1.0, 1.));
+        SHOW(cauchy(1.0, 1.));
+        SHOW(cauchy(1, 1));
+        SHOW(cauchy(1, 1));
 
         cout << bold << underline << "Fisher F-distribution" << reset << endl;
-        cout << "fisher_f(2.0,2): " << fisher_f(2.0, 2.) << endl;
-        cout << "fisher_f(2.0,2): " << fisher_f(2.0, 2.) << endl;
-        cout << "fisher_f(2,2): " << fisher_f(2, 2) << endl;
-        cout << "fisher_f(2,2): " << fisher_f(2, 2) << endl;
+        SHOW(fisher_f(2.0, 2.));
+        SHOW(fisher_f(2.0, 2.));
+        SHOW(fisher_f(2, 2));
+        SHOW(fisher_f(2, 2));
 
         cout << bold << underline << "Student T-Distribution" << reset << endl;
-        cout << "student_t(10.0): " << student_t(10.0) << endl;
-        cout << "student_t(10.0): " << student_t(10.0) << endl;
-        cout << "student_t(10): " << student_t(10) << endl;
-        cout << "student_t(10): " << student_t(10) << endl;
+        SHOW(student_t(10.0));
+        SHOW(student_t(10.0));
+        SHOW(student_t(10));
+        SHOW(student_t(10));
 
 
     }
@@ -131,28 +133,28 @@ int main() {
          << reset << endl;
     {
         cout << bold << underline << "Bernoulli distribution" << reset << endl;
-        cout << "bernoulli(0.7): " << bernoulli(0.7) << endl;
-        cout << "bernoulli(0.7): " << bernoulli(0.7) << endl;
-        cout << "bernoulli(0.3): " << bernoulli(0.3) << endl;
-        cout << "bernoulli(0.3): " << bernoulli(0.3) << endl;
+        SHOW(bernoulli(0.7));
+        SHOW(bernoulli(0.7));
+        SHOW(bernoulli(0.3));
+        SHOW(bernoulli(0.3));
 
         cout << bold << underline << "Binomial distribution" << reset << endl;
-        cout << "binomial(100,0.7): " << binomial(100, 0.7) << endl;
-        cout << "binomial(100,0.7): " << binomial(100, 0.7) << endl;
-        cout << "binomial(100,0.3): " << binomial(100, 0.3) << endl;
-        cout << "binomial(100,0.3): " << binomial(100, 0.3) << endl;
+        SHOW(binomial(100, 0.7));
+        SHOW(binomial(100, 0.7));
+        SHOW(binomial(100, 0.3));
+        SHOW(binomial(100, 0.3));
 
         cout << bold << underline << "Geometric distribution" << reset << endl;
-        cout << "geometric(0.9): " << geometric(0.9) << endl;
-        cout << "geometric(0.9): " << geometric(0.9) << endl;
-        cout << "geometric(0.1): " << geometric(0.1) << endl;
-        cout << "geometric(0.1): " << geometric(0.1) << endl;
+        SHOW(geometric(0.9));
+        SHOW(geometric(0.9));
+        SHOW(geometric(0.1));
+        SHOW(geometric(0.1));
 
         cout << bold << underline << "Negative binomial distribution" << reset << endl;
-        cout << "negative_binomial(100,0.7): " << negative_binomial(100, 0.7) << endl;
-        cout << "negative_binomial(100,0.7): " << negative_binomial(100, 0.7) << endl;
-        cout << "negative_binomial(100,0.3): " << negative_binomial(100, 0.3) << endl;
-        cout << "negative_binomial(100,0.3): " << negative_binomial(100, 0.3) << endl;
+        SHOW(negative_binomial(100, 0.7));
+        SHOW(negative_binomial(100, 0.7));
+        SHOW(negative_binomial(100, 0.3));
+        SHOW(negative_binomial(100, 0.3));
 
     }
 
@@ -161,34 +163,34 @@ int main() {
          << endl;
     {
         cout << bold << underline << "Poisson distribution" << reset << endl;
-        cout << "poisson(1.5): " << poisson(1.5) << endl;
-        cout << "poisson(1.5): " << poisson(1.5) << endl;
-        cout << "poisson(1.5): " << poisson(1.5) << endl;
-        cout << "poisson(1.5): " << poisson(1.5) << endl;
+        SHOW(poisson(1.5));
+        SHOW(poisson(1.5));
+        SHOW(poisson(1.5));
+        SHOW(poisson(1.5));
 
         cout << bold << underline << "Exponential distribution" << reset << endl;
-        cout << "exponential(1.5): " << exponential(1.5) << endl;
-        cout << "exponential(1.5): " << exponential(1.5) << endl;
-        cout << "exponential(1.5): " << exponential(1.5) << endl;
-        cout << "exponential(1.5): " << exponential(1.5) << endl;
+        SHOW(exponential(1.5));
+        SHOW(exponential(1.5));
+        SHOW(exponential(1.5));
+        SHOW(exponential(1.5));
 
         cout << bold << underline << "Gamma distribution" << reset << endl;
-        cout << "gamma(1.5,1.5): " << gamma(1.5, 1.5) << endl;
-        cout << "gamma(1.5,1.5): " << gamma(1.5, 1.5) << endl;
-        cout << "gamma(1.5,1.5): " << gamma(1.5, 1.5) << endl;
-        cout << "gamma(1.5,1.5): " << gamma(1.5, 1.5) << endl;
+        SHOW(gamma(1.5, 1.5));
+        SHOW(gamma(1.5, 1.5));
+        SHOW(gamma(1.5, 1.5));
+        SHOW(gamma(1.5, 1.5));
 
         cout << bold << underline << "Weibull distribution" << reset << endl;
-        cout << "weibull(1.5,1.5): " << weibull(1.5, 1.5) << endl;
-        cout << "weibull(1.5,1.5): " << weibull(1.5, 1.5) << endl;
-        cout << "weibull(1.5,1.5): " << weibull(1.5, 1.5) << endl;
-        cout << "weibull(1.5,1.5): " << weibull(1.5, 1.5) << endl;
+        SHOW(weibull(1.5, 1.5));
+        SHOW(weibull(1.5, 1.5));
+        SHOW(weibull(1.5, 1.5));
+        SHOW(weibull(1.5, 1.5));
 
         cout << bold << underline << "Extreme Value distribution" << reset << endl;
-        cout << "extreme_value(1.5,1.5): " << extreme_value(1.5, 1.5) << endl;
-        cout << "extreme_value(1.5,1.5): " << extreme_value(1.5, 1.5) << endl;
-        cout << "extreme_value(1.5,1.5): " << extreme_value(1.5, 1.5) << endl;
-        cout << "extreme_value(1.5,1.5): " << extreme_value(1.5, 1.5) << endl;
+        SHOW(extreme_value(1.5, 1.5));
+        SHOW(extreme_value(1.5, 1.5));
+        SHOW(extreme_value(1.5, 1.5));
+        SHOW(extreme_value(1.5, 1.5));
 
     }
 
@@ -197,12 +199,12 @@ int main() {
          << endl;
     {
         cout << bold << underline << "Discrete distribution" << reset << endl;
-        cout << "discrete({2,2,1,1,2,2,1,1,2,2}): " << discrete({2, 2, 1, 1, 2, 2, 1, 1, 2, 2}) << endl;
-        cout << "discrete({2,2,1,1,2,2,1,1,2,2}): " << discrete({2, 2, 1, 1, 2, 2, 1, 1, 2, 2}) << endl;
+        SHOW(discrete({2, 2, 1, 1, 2, 2, 1, 1, 2, 2}));
+        SHOW(discrete({2, 2, 1, 1, 2, 2, 1, 1, 2, 2}));
         cout << "vector<int> a = {2,2,1,1,2,2,1,1,2,2}; " << endl;
         vector<int> a = {2, 2, 1, 1, 2, 2, 1, 1, 2, 2};
-        cout << "discrete(a): " << discrete(a) << endl;
-        cout << "discrete(a): " << discrete(a) << endl;
+        SHOW(discrete(a));
+        SHOW(discrete(a));
 
         cout << bold << underline << "Piecewise constant distribution" << reset
              << endl;
@@ -235,25 +237,25 @@ int main() {
     cout << on_yellow << bold << underline << "Container Generators" << reset << endl;
     {
         cout << bold << underline << "Eye" << reset << endl;
-        cout << "eye(3): " << eye(3) << endl;
-        cout << "eye<int>(3): " << eye<int>(3) << endl;
+        SHOW(eye(3));
+        SHOW(eye<int>(3));
         cout << bold << underline << "Linspace" << reset << endl;
-        cout << "linspace(3.0,10.0,11.0): " << linspace(3.0, 10.0, 11.0) << endl;
-        cout << "linspace<int>(3,10,11): " << linspace<int>(3, 10, 11) << endl;
+        SHOW(linspace(3.0, 10.0, 11.0));
+        SHOW(linspace<int>(3, 10, 11));
         cout << bold << underline << "Rand" << reset << endl;
-        cout << "rand(10): " << rand(10) << endl;
-        cout << "rand(4,4): " << rand(4, 4) << endl;
-        cout << "rand(2,3,2): " << rand(2, 3, 2) << endl;
+        SHOW(rand(10));
+        SHOW(rand(4, 4));
+        SHOW(rand(2, 3, 2));
         cout << bold << underline << "Zeros" << reset << endl;
-        cout << "zeros(3): " << zeros(3) << endl;
-        cout << "zeros(3,3): " << zeros(3, 3) << endl;
+        SHOW(zeros(3));
+        SHOW(zeros(3, 3));
         cout << bold << underline << "Ones" << reset << endl;
-        cout << "ones(3): " << ones(3) << endl;
-        cout << "ones(3,3): " << ones(3, 3) << endl;
+        SHOW(ones(3));
+        SHOW(ones(3, 3));
         cout << bold << underline << "Perm" << reset << endl;
-        cout << "perm(10): " << perm(10) << endl;
-        cout << "perm(20): " << perm(20) << endl;
-        cout << "perm(30,3): " << perm(30, 3) << endl;
+        SHOW(perm(10));
+        SHOW(perm(20));
+        SHOW(perm(30, 3));
     }
 
     cout << on_yellow << bold << underline << "Numeric Container Methods and Statistics" << reset << endl;
@@ -262,28 +264,28 @@ int main() {
         vector<double> a = rand(10);
         disp(a);
         cout << bold << underline << "Statistics" << reset << endl;
-        cout << "mean(a): " << mean(a) << endl;
-        cout << "stdev(a): " << stdev(a) << endl;
-        cout << "stdev(a,mean(a)): " << stdev(a,mean(a)) << endl;
+        SHOW(mean(a));
+        SHOW(stdev(a));
+        SHOW(stdev(a,mean(a)));
         cout << bold << underline << "Math" << reset << endl;
-        cout << "pow(a, 3.2): " << pow(a, 3.2) << endl;
-        cout << "prod(a): " << prod(a) << endl;
-        cout << "sum(a): " << sum(a) << endl;
+        SHOW(pow(a, 3.2));
+        SHOW(prod(a));
+        SHOW(sum(a));
     }
 
     cout << on_yellow << bold << underline << "Operations between numeric containers" << reset << endl;
     {
         cout << bold << underline << "Random numbers" << reset << endl;
         vector<double> a = rand(10);
-        cout << "a: " << a << endl;
+        SHOW(a);
         vector<double> b = rand(10);
-        cout << "b: " << b << endl;
+        SHOW(b);
         vector<int> c = ones(20);
-        cout << "c: " << c << endl;
+        SHOW(c);
         cout << bold << underline << "Operations" << reset << endl;
-        cout << "cat(a,b): " << cat(a, b) << endl;
-        cout << "copyshape(c,a): " << copyshape(c,a) << endl;
-        cout << "inner(a,b): " << inner(a,b) << endl;
+        SHOW(cat(a, b));
+        SHOW(copyshape(c,a));
+        SHOW(inner(a,b));
     }
 
     cout << on_yellow << bold << underline
@@ -293,11 +295,11 @@ int main() {
                   << "boost::int8_t and boost::uint64_t carry the exact memory size in their names" << reset
                   << endl;
         int8_t i8 = 1;
-        cout << "sizeof(i8): " << sizeof(i8) << '\n';
+        SHOW(sizeof(i8));
 
         #ifndef BOOST_NO_INT64_T
         uint64_t ui64 = 1;
-        cout << "sizeof(ui64): " << sizeof(ui64) << '\n';
+        SHOW(sizeof(ui64));
         #endif
 
         cout << bold << underline
@@ -305,32 +307,32 @@ int main() {
                   << reset << endl;
 
         int_least8_t il8 = 1;
-        cout << "sizeof(il8): " << sizeof(il8) << '\n';
+        SHOW(sizeof(il8));
 
         uint_least32_t uil32 = 1;
-        cout << "sizeof(uil32): " << sizeof(uil32) << '\n';
+        SHOW(sizeof(uil32));
 
         cout << bold << underline
                   << "int_fast8_t and uint_fast16_t also have a minimum size. Their actual size is set to a value that guarantees the best performance"
                   << reset << endl;
 
         int_fast8_t if8 = 1;
-        cout << "sizeof(if8): " << sizeof(if8) << '\n';
+        SHOW(sizeof(if8));
 
         uint_fast16_t uif16 = 1;
-        cout << "sizeof(uif16): " << sizeof(uif16) << '\n';
+        SHOW(sizeof(uif16));
 
         cout << bold << underline
                   << "intmax_t and uintmax_t, for the maximum width integer types available on a platform"
                   << reset << endl;
 
         intmax_t imax = 1;
-        cout << "sizeof(imax): " << sizeof(imax) << '\n';
+        SHOW(sizeof(imax));
 
-        cout << "sizeof(UINT8_C(1)): " << sizeof(UINT8_C(1)) << '\n';
+        SHOW(sizeof(UINT8_C(1)));
 
         #ifndef BOOST_NO_INT64_T
-        cout << "sizeof(INT64_C(1)): " << sizeof(INT64_C(1)) << '\n';
+        SHOW(sizeof(INT64_C(1)));
         #endif
     }
 
@@ -340,7 +342,7 @@ int main() {
     {
         int i = 0x10000;
         short s = i;
-        cout << "s: " << s << '\n';
+        SHOW(s);
     }
 
     cout << bold << underline << "Overflow detection with boost::numeric_cast"
@@ -349,10 +351,10 @@ int main() {
         try {
             int i = 0x10000;
             short s = numeric_cast<short>(i);
-            cout << "s: " << s << '\n';
+            SHOW(s);
         }
         catch (bad_numeric_cast &e) {
-            cerr << "e.what(): " << e.what() << '\n';
+            SHOW(e.what());
         }
     }
 
@@ -362,10 +364,10 @@ int main() {
         try {
             int i = -0x10000;
             short s = numeric_cast<short>(i);
-            cout << "s: " << s << '\n';
+            SHOW(s);
         }
         catch (negative_overflow &e) {
-            cerr << "e.what(): " << e.what() << '\n';
+            SHOW(e.what());
         }
     }
 
@@ -927,6 +929,53 @@ int main() {
         cout << "knn query result:" << endl;
         BOOST_FOREACH(value i, result_n)
                         cout << geometry::wkt<box>(boxes[i]) << endl;
+    }
+
+    cout << bold << underline << "Descriptive statistics" << reset << endl;
+    {
+        std::vector<double> v = {5,2,6,8,9,4,2,3};
+        SHOW(mean(v));
+        SHOW(mean(v.begin(),v.end()));
+        SHOW(std_dev(v));
+        SHOW(std_dev(v.begin(),v.end()));
+    }
+
+    cout << bold << underline << "Distribution probabilities" << reset << endl;
+    {
+        SHOW(normal_pdf(0.0));
+        SHOW(normal_pdf(1.1));
+        SHOW(students_t_pdf(0.0,15));
+    }
+
+    cout << bold << underline << "Cumulative distribution probabilities" << reset << endl;
+    {
+        SHOW(normal_cdf(0.0));
+        SHOW(normal_cdf(0.0,1.1));
+        SHOW(normal_cdf(1.1));
+        SHOW(normal_cdf(1.1,1.1));
+        SHOW(students_t_cdf(0.0,15));
+    }
+
+    cout << bold << underline << "Confidence intervals" << reset << endl;
+    {
+        vector<double> alphas = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
+        for (auto &&alpha : alphas) {
+            double mean = 9.26146;
+            double w = students_t_confidence_limits(9.26146,0.02278881,195,alpha);
+            cout << "students_t_confidence_limits(9.26146,0.02278881,195," << alpha << ")): " << mean - w << " - " << mean + w << endl;
+        }
+    }
+
+
+    cout << bold << underline << "T Test" << reset << endl;
+    {
+        std::vector<double> v = {5,2,6,8,9,4,2,3,65,231,65,3,2,3,5,6,8,5,3,3,7,9,8,9};
+        std::vector<double> v2 = {1,2,3,-3,-2,-1,1,2,3,-3,-2,-1,1,2,3,-3,-2,-1};
+        std::vector<double> v3 = {1,2,3,3,-2,-1};
+        SHOW(students_t_test(v));
+        SHOW(students_t_test(v2));
+        SHOW(students_t_test(v3));
+        SHOW(students_t_test(v,v2));
     }
 
     return 0;

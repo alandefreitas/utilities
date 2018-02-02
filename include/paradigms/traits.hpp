@@ -304,6 +304,20 @@ namespace utl {
     template<typename T>
     struct is_container_of_container_of_scalar : std::integral_constant<bool, utl::is_container<T>::value && utl::has_scalar_container_value_type<T>::value> {};
 
+    template<typename T, typename = void>
+    struct is_iterator
+    {
+        static constexpr bool value = false;
+    };
+
+    template<typename T>
+    struct is_iterator<T, typename std::enable_if<!std::is_same<typename std::iterator_traits<T>::value_type, void>::value>::type>
+    {
+        static constexpr bool value = true;
+    };
+
+
+
 }
 
 #endif
